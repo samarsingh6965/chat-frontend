@@ -1,5 +1,4 @@
 import { useState, type FC } from 'react';
-import InputEmail from '../Components/FormControl/InputEmail';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import InputPassword from '../Components/FormControl/InputPassword';
@@ -44,7 +43,7 @@ const Login: FC<LoginProps> = () => {
                                 <div className='text-sm'>I agree with <span className='text-red-500 font-medium cursor-pointer'>terms & conditions</span></div>
                             </span>
                             <span className='self-start'>
-                                <div className='text-sm'>Already registered ! <Link to={'/register'} className='text-red-500 font-medium cursor-pointer'>Click here</Link></div>
+                                <div className='text-sm'>Not registered yet ! <Link to={'/register'} className='text-red-500 font-medium cursor-pointer'>Click here</Link></div>
                             </span>
                             <button disabled={disableSubmitButton} type='submit' className='text-white bg-red-500 disabled:bg-red-300 w-full py-1.5 rounded-md hover:bg-red-600'>Login</button>
                         </Form>
