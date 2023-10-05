@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from '../Auth/Login';
 import Register from '../Auth/Register';
+import TermsAndConditions from '../Pages/TermsAndConditions';
 
 interface RouterProps {}
 
@@ -11,6 +12,7 @@ const Router: FC<RouterProps> = () => {
             <Route path='/' element={<Login/>}/>
             <Route path='*' element={<h1>Not Fount</h1>}/>
             <Route path='/register' element={<Register/>}/>
+            <Route path='/terms&conditions' element={<TermsAndConditions/>}/>
             <Route path='/home' element={<h1>Home</h1>}/>
         </Routes>
     );

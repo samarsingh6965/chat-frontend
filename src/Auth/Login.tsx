@@ -58,11 +58,11 @@ const Login: FC<LoginProps> = () => {
                     >
                         <Form className='w-full flex flex-col gap-3'>
                             <InputText name='username' id='username' label='Username OR Email' />
-                            <InputPassword name='password' id='password' label='Password' />
+                            <InputPassword name='password' id='password' label='Password' required={true}/>
                             <span className='self-start'>
-                                <div className='text-sm'>Not registered yet ! <Link to={'/register'} className='text-red-500 font-medium cursor-pointer'>Click here</Link></div>
+                                <div className='text-sm'>Not registered yet ! <Link to={'/register'} className='text-blue-500 font-medium cursor-pointer'>Click here</Link></div>
                             </span>
-                            <button type='submit' className='text-white bg-red-500 disabled:bg-red-300 w-full py-1.5 rounded-md hover:bg-red-600'>Login</button>
+                            <button type='submit' className='font-medium text-white bg-blue-600 disabled:bg-blue-300 w-full py-1.5 rounded-md hover:bg-blue-700'>Login</button>
                         </Form>
                     </Formik>
                 </div>

@@ -104,15 +104,15 @@ const Register: FC<RegisterProps> = () => {
                         <Form className='w-full flex flex-col gap-3'>
                             <InputText name='username' id='username' label='Username' />
                             <InputEmail name='email' id='email' label='Email' />
-                            <InputPassword name='password' id='password' label='Password' />
+                            <InputPassword name='password' id='password' label='Password' required={true}/>
                             <span className='self-start flex items-center gap-2'>
                                 <input type='checkbox' id='tc' className='cursor-pointer' onChange={(e) => handleSubmitButton(e.target.checked)} />
-                                <div className='text-sm'>I agree with <span className='text-red-500 font-medium cursor-pointer'>terms & conditions</span></div>
+                                <div className='text-sm'>I agree with <Link to={'/terms&conditions'} className='text-blue-500 font-medium cursor-pointer'>terms & conditions</Link></div>
                             </span>
                             <span className='self-start'>
-                                <div className='text-sm'>Already registered ! <Link to={'/'} className='text-red-500 font-medium cursor-pointer'>Click here</Link></div>
+                                <div className='text-sm'>Already registered ! <Link to={'/'} className='text-blue-500 font-medium cursor-pointer'>Click here</Link></div>
                             </span>
-                            <button disabled={disableSubmitButton} type='submit' className='text-white bg-red-500 disabled:bg-red-300 w-full py-1.5 rounded-md hover:bg-red-600'>Register</button>
+                            <button disabled={disableSubmitButton} type='submit' className='font-medium text-white bg-blue-600 disabled:bg-blue-300 w-full py-1.5 rounded-md hover:bg-blue-700'>Register</button>
                         </Form>
                     </Formik>
                 </div>
