@@ -9,7 +9,9 @@ const Router: FC<RouterProps> = () => {
     return (
         <Routes>
             <Route path='/' element={<Login/>}/>
+            <Route path='*' element={<h1>Not Fount</h1>}/>
             <Route path='/register' element={<Register/>}/>
+            <Route path='/home' element={<h1>Home</h1>}/>
         </Routes>
     );
 }

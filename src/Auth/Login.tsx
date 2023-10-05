@@ -1,27 +1,48 @@
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import InputPassword from '../Components/FormControl/InputPassword';
 import BG from '../Assets/login.jpg'
 import InputText from '../Components/FormControl/InputText';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
+import http from '../Services/http/http';
+import { toast } from 'react-toast';
 
 interface LoginProps { }
 
 const Login: FC<LoginProps> = () => {
-    const [disableSubmitButton, setDisableSUbmitButton] = useState<boolean>(true)
+    const navigate = useNavigate();
     const handleSubmit = async (values: { username: string, password: string }) => {
-        console.log('login', values)
-    }
-    const handleSubmitButton = (value: boolean) => {
-        setDisableSUbmitButton(!value)
+        try {
+            const response: responseType = await http({
+                url: '/auth/login',
+                method: 'post',
+                data: values
+            }, true);
+            if (response.data?.code === 'SUCCESS_200') {
+                sessionStorage.setItem('token', response.data.data.token);
+                sessionStorage.setItem('userDetails', JSON.stringify(response.data.data.userDetail))
+                setTimeout(() => {
+                    navigate('/home')
+                }, 2000);
+                toast.success(response?.data?.message)
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: any | unknown) {
+            toast.error((error as any)?.response?.data?.message);
+        }
     }
     const validationSchema = Yup.object().shape({
         username: Yup.string()
             .required('Username is required'),
-        password: Yup.string()
-            .min(6, 'Password must be at least 6 characters')
-            .required('Password is required'),
+            password: Yup.string().required('Password is required')
+            .min(8, 'Password must be 8 characters long')
+            .matches(/[0-9]/, 'Password requires a number')
+            .matches(/[a-z]/, 'Password requires a lowercase letter')
+            .matches(/[A-Z]/, 'Password requires an uppercase letter')
+            .matches(/[^\w]/, 'Password requires a symbol')
     });
     return (
         <div className='w-screen h-screen'>
@@ -38,14 +59,10 @@ const Login: FC<LoginProps> = () => {
                         <Form className='w-full flex flex-col gap-3'>
                             <InputText name='username' id='username' label='Username OR Email' />
                             <InputPassword name='password' id='password' label='Password' />
-                            <span className='self-start flex items-center gap-2'>
-                                <input type='checkbox' id='tc' className='cursor-pointer' onChange={(e) => handleSubmitButton(e.target.checked)} />
-                                <div className='text-sm'>I agree with <span className='text-red-500 font-medium cursor-pointer'>terms & conditions</span></div>
-                            </span>
                             <span className='self-start'>
                                 <div className='text-sm'>Not registered yet ! <Link to={'/register'} className='text-red-500 font-medium cursor-pointer'>Click here</Link></div>
                             </span>
-                            <button disabled={disableSubmitButton} type='submit' className='text-white bg-red-500 disabled:bg-red-300 w-full py-1.5 rounded-md hover:bg-red-600'>Login</button>
+                            <button type='submit' className='text-white bg-red-500 disabled:bg-red-300 w-full py-1.5 rounded-md hover:bg-red-600'>Login</button>
                         </Form>
                     </Formik>
                 </div>
