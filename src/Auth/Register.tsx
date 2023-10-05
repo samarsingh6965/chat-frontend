@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import http from '../Services/http/http';
 import { responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import { toast } from 'react-toast';
+import {motion} from 'framer-motion'
 
 interface RegisterProps { }
 interface IUsers { _id: string, username: string, email: string }
@@ -91,7 +92,11 @@ const Register: FC<RegisterProps> = () => {
     return (
         <div className='w-screen h-screen'>
             <div style={{ backgroundImage: `url(${BG})` }} className="w-full h-full bg-cover bg-repeat flex items-center justify-center">
-                <div className="w-[340px] shadow-lg drop-shadow-lg shadow-gray-300 p-4 bg-white rounded-md">
+                <motion.div 
+                initial={{scale:0}}
+                animate={{scale:1,dur:0.2}}
+                exit={{scale:1}}
+                className="w-[340px] transition-all shadow-lg drop-shadow-lg shadow-gray-300 p-4 bg-white rounded-md">
                     <Formik
                         initialValues={{
                             username: '',
@@ -115,7 +120,7 @@ const Register: FC<RegisterProps> = () => {
                             <button disabled={disableSubmitButton} type='submit' className='font-medium text-white bg-blue-600 disabled:bg-blue-300 w-full py-1.5 rounded-md hover:bg-blue-700'>Register</button>
                         </Form>
                     </Formik>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
