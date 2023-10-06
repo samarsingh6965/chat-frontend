@@ -11,6 +11,7 @@ import * as Yup from 'yup'
 import GenderRadioGroup from '../FormControl/GenderRadioGroup';
 import { AnimatePresence, motion } from 'framer-motion'
 import ActionPop from './ActionPop';
+import InputTextArea from '../FormControl/InputTextArea';
 
 interface ProfilePopProps {
     open: boolean
@@ -50,6 +51,7 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
     }
     const validationSchema = Yup.object().shape({
         gender: Yup.string().required('gender is required'),
+        bio: Yup.string(),
         name: Yup.string().required('Name is required'),
         username: Yup.string().required('Username is required')
             .test('check-username', 'username already taken', async function (value) {
@@ -71,8 +73,24 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
         { id: 1, name: 'View Profile Image', click: ViewProfileImage },
         { id: 2, name: 'Edit Profile Image', click: EditProfileImage }
     ]
-    const handleSubmit = (values: any) => {
-        console.log(values)
+    const handleSubmit = async (values: any) => {
+        try {
+            values['_id'] = userDetails._id;
+            const response: responseType = await http({
+                url: '/user/editPersnolDetail',
+                method: 'put',
+                data: values
+            });
+            if (response.data?.code === 'SUCCESS_200') {
+                toast.success(response?.data?.message);
+                setDisableFields(true)
+                sessionStorage.setItem('userDetails',JSON.stringify(response.data.data));
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: any | unknown) {
+            toast.error((error as any)?.response?.data?.message);
+        }
     }
     return (
         <AnimatePresence>
@@ -100,7 +118,8 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
                                 initialValues={{
                                     name: userDetails.name,
                                     username: userDetails.username,
-                                    gender: userDetails.gender
+                                    gender: userDetails.gender,
+                                    bio:userDetails.bio
                                 }}
                                 validationSchema={validationSchema}
                                 onSubmit={handleSubmit}
@@ -109,6 +128,7 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
                                     <InputText name='name' label='Name' id='name' required={false} disabled={disableFields} />
                                     <InputText name='username' label='Username' id='username' required={false} disabled={disableFields} />
                                     <Field component={() => <GenderRadioGroup disabled={disableFields} />} name='gender' disabled={true} />
+                                    <InputTextArea name='bio' label='Bio' required={false} disabled={disableFields}/>
                                     {disableFields ?
                                         <span onClick={() => setDisableFields(false)} className='font-medium flex justify-center cursor-pointer text-white bg-blue-600 disabled:bg-blue-300 w-full py-1.5 rounded-md hover:bg-blue-700'>Edit Profile</span>
                                         :
