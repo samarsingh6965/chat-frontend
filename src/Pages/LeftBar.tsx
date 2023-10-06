@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import LeftHeader from './LeftHeader';
 import { BsSearch } from 'react-icons/bs';
-import avatar from '../Assets/avatar.jpg'
+import avatar from '../Assets/maleavatar.jpg'
 
 interface LeftBarProps { }
 
