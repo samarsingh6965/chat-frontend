@@ -13,16 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        limit={2}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        transition={Zoom}
-        theme="light"
-      />
+      <ToastContainer position="top-center" autoClose={2000} limit={2} hideProgressBar={false} newestOnTop={true} closeOnClick transition={Zoom} theme="light"/>
       <App />
     </BrowserRouter>
   </React.StrictMode>
