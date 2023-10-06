@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import avatar from '../../Assets/avatar.jpg'
+import avatar from '../Assets/avatar.jpg'
 
 interface LeftHeaderProps {}
 

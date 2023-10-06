@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import LeftBar from '../Components/Common/LeftBar';
+import LeftBar from '../Pages/LeftBar';
 
 interface HomeProps { }
 

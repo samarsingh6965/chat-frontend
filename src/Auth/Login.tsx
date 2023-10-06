@@ -7,8 +7,8 @@ import InputText from '../Components/FormControl/InputText';
 import { Link, useNavigate } from 'react-router-dom';
 import { responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../Services/http/http';
-import { toast } from 'react-toast';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 interface LoginProps { }
 
