@@ -32,7 +32,7 @@ const LeftBar: FC<LeftBarProps> = () => {
     useEffect(() => {
         fetchUsers()
         // eslint-disable-next-line
-    }, [])
+    }, [search])
     return (
         <div className="w-full h-full flex flex-col bg-blue-100">
             <div className="w-full">
@@ -48,7 +48,7 @@ const LeftBar: FC<LeftBarProps> = () => {
                         <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
                         <div className="flex flex-col cursor-pointer">
                             <h1 className='font-medium'>{user.name}</h1>
-                            <h3 className='text-sm truncate'>{user.bio}</h3>
+                            <h3 className='text-sm truncate'>{user.username}</h3>
                         </div>
                     </div>
                 ))}
