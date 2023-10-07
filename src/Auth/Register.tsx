@@ -7,13 +7,12 @@ import BG from '../Assets/login.jpg'
 import InputText from '../Components/FormControl/InputText';
 import { Link, useNavigate } from 'react-router-dom';
 import http from '../Services/http/http';
-import { responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
+import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import { motion } from 'framer-motion'
 import { toast } from 'react-toastify';
 import GenderRadioGroup from '../Components/FormControl/GenderRadioGroup';
 
 interface RegisterProps { }
-interface IUsers { _id: string, username: string, email: string }
 
 const Register: FC<RegisterProps> = () => {
     const [disableSubmitButton, setDisableSUbmitButton] = useState<boolean>(true)

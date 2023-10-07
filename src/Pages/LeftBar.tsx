@@ -1,28 +1,57 @@
-import type { FC } from 'react';
+import { useState, type FC, useEffect } from 'react';
 import LeftHeader from './LeftHeader';
 import { BsSearch } from 'react-icons/bs';
-import avatar from '../Assets/maleavatar.jpg'
+import maleavatar from '../Assets/maleavatar.jpg'
+import femaleavatar from '../Assets/femaleavatar.jpg'
+import otheravatar from '../Assets/otheravatar.jpg'
+import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
+import http from '../Services/http/http';
+import { toast } from 'react-toastify';
 
 interface LeftBarProps { }
 
 const LeftBar: FC<LeftBarProps> = () => {
+    const [users, setUsers] = useState<IUsers[] | null>(null)
+    const [search,setSearch] = useState<string>('')
+    const fetchUsers = async () => {
+        try {
+            const response: responseType = await http({
+                url: '/user/getUsers',
+                method: 'get',
+                data:{search}
+            });
+            if (response.data?.code === 'SUCCESS_200') {
+                setUsers(response.data.data)
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: ErrorCallback | unknown) {
+            toast.error((error as any)?.response?.data?.message);
+        }
+    }
+    useEffect(() => {
+        fetchUsers()
+        // eslint-disable-next-line
+    }, [])
     return (
         <div className="w-full h-full flex flex-col bg-blue-100">
             <div className="w-full">
                 <LeftHeader />
             </div>
             <div className="w-full flex items-center justify-center p-2 relative border-b">
-                <input type="search" name="search" id="search" placeholder='Search' className='w-full p-2 outline-none border-none rounded-md ps-10 placeholder:text-gray-600 placeholder:font-medium text-gray-900 font-medium' />
+                <input onChange={(e) => setSearch(e.target.value)} type="search" name="search" id="search" placeholder='Search' className='w-full p-2 outline-none border-none rounded-md ps-10 placeholder:text-gray-600 placeholder:font-medium text-gray-900 font-medium' />
                 <BsSearch className='text-xl absolute left-4' />
             </div>
-            <div className="w-full">
-                <div className="w-full border-b flex gap-3 items-center p-2 hover:bg-sky-100">
-                    <img onClick={() => { window.alert('Clicked on Profile.') }} src={avatar} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
-                    <div className="flex flex-col cursor-pointer">
-                        <h1 className='font-medium'>Name Name</h1>
-                        <h3 className='text-sm'>username</h3>
+            <div className="w-full h-auto overflow-y-scroll scrollbar-thin scrollbar-thumb-sky-200">
+                {users?.map((user:IUsers) => (
+                    <div key={user._id} className="w-full border-b flex gap-3 items-center p-2 hover:bg-sky-100">
+                        <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
+                        <div className="flex flex-col cursor-pointer">
+                            <h1 className='font-medium'>{user.name}</h1>
+                            <h3 className='text-sm truncate'>{user.bio}</h3>
+                        </div>
                     </div>
-                </div>
+                ))}
             </div>
         </div>
     );

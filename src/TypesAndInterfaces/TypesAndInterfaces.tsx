@@ -6,23 +6,4 @@ export type responseType = {
     }
 };
 
-export interface IAsset {
-    _id: string;
-    name: string;
-    code: string;
-    assetType: {
-        _id: string;
-        name: string;
-    };
-    images: {
-        _id: string;
-        url: string;
-        mimetype: string;
-    }[];
-}
-
-export interface IUserPermission {
-    controller: string;
-    action: string;
-}
-export interface IactionPopAction { id: number, name: string, click: Function }
+export interface IUsers { _id: string,name:string, username?: string, email?: string ,gender?:string,bio?:string,profileImage:{_id:string,url:string,mimetype:string}|null}

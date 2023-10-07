@@ -4,7 +4,7 @@ import femaleavatar from '../../Assets/femaleavatar.jpg'
 import otheravatar from '../../Assets/otheravatar.jpg'
 import { Field, Form, Formik } from 'formik';
 import InputText from '../FormControl/InputText';
-import { responseType } from '../../TypesAndInterfaces/TypesAndInterfaces';
+import { IUsers, responseType } from '../../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../../Services/http/http';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup'
@@ -17,8 +17,6 @@ interface ProfilePopProps {
     open: boolean
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-interface IUsers { _id: string, username: string, email: string }
-
 const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
     const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]');
     const [disableFields, setDisableFields] = useState<boolean>(true)
