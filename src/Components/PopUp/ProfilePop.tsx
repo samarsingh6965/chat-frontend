@@ -12,6 +12,7 @@ import GenderRadioGroup from '../FormControl/GenderRadioGroup';
 import { AnimatePresence, motion } from 'framer-motion'
 import ActionPop from './ActionPop';
 import InputTextArea from '../FormControl/InputTextArea';
+import { BsArrowLeft } from 'react-icons/bs';
 
 interface ProfilePopProps {
     open: boolean
@@ -105,7 +106,7 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -70 }}
                         onClick={(event) => handleChildClickPrevent(event)}
-                        className="sm:w-[450px] rounded-lg shadow-2xl shadow-blue-100 flex flex-col gap-3 items-center sm:mx-0 mx-6 w-full sm:min-w-[450px] h-auto px-4 py-8 bg-white"
+                        className="sm:w-[450px] relative rounded-lg shadow-2xl shadow-blue-100 flex flex-col gap-3 items-center sm:mx-0 mx-6 w-full sm:min-w-[450px] h-auto px-4 py-8 bg-white"
                     >
                         <div className="w-24 h-24 min-h-24 min-w-24 rounded-full border relative">
                             <img src={userDetails.profileImage === null ? (userDetails.gender === 'male' ? maleavatar : userDetails.gender === 'female' ? femaleavatar : otheravatar) : `${userDetails.profileImage.url}`} alt={'profile'} className='w-full h-full rounded-full cursor-pointer' />
@@ -135,6 +136,7 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
                                 </Form>
                             </Formik>
                         </div>
+                        <span className='text-2xl cursor-pointer absolute left-5 top-5'><BsArrowLeft/></span>
                     </motion.div>
                 </motion.div>
             )}
