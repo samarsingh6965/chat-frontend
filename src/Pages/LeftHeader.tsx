@@ -29,7 +29,7 @@ const LeftHeader: FC<LeftHeaderProps> = () => {
     }
     return (
         <div className="w-full h-20 bg-sky-100 flex items-center justify-between px-2 border-b">
-            <img onClick={handleProfile} src={userDetails.profileImage === null ? (userDetails.gender === 'male' ? maleavatar : userDetails.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${userDetails.profileImage.url}`} alt={'profile'} className='w-14 h-14 min-h-14 min-w-14 rounded-full cursor-pointer' />
+            <img onClick={handleProfile} src={userDetails.profileImage === null ? (userDetails.gender === 'male' ? maleavatar : userDetails.gender === 'female' ? femaleavatar : otheravatar) : `${userDetails.profileImage.url}`} alt={'profile'} className='w-14 h-14 min-h-14 min-w-14 rounded-full cursor-pointer' />
             <div className="flex items-center gap-2">
                 <ActionPop action={actios} icon='FiMoreVertical'/>
             </div>

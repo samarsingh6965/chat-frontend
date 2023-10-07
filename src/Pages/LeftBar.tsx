@@ -7,12 +7,14 @@ import otheravatar from '../Assets/otheravatar.jpg'
 import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../Services/http/http';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 interface LeftBarProps { }
 
 const LeftBar: FC<LeftBarProps> = () => {
     const [users, setUsers] = useState<IUsers[] | null>(null)
     const [search,setSearch] = useState<string>('')
+    const navigate = useNavigate();
     const fetchUsers = async () => {
         try {
             const response: responseType = await http({
@@ -46,7 +48,7 @@ const LeftBar: FC<LeftBarProps> = () => {
                 {users?.map((user:IUsers) => (
                     <div key={user._id} className="w-full border-b flex gap-3 items-center p-2 hover:bg-sky-100">
                         <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
-                        <div className="flex flex-col cursor-pointer">
+                        <div onClick={() => navigate(`/home/chat/${user._id}`)} className="flex flex-col cursor-pointer">
                             <h1 className='font-medium'>{user.name}</h1>
                             <h3 className='text-sm truncate'>{user.username}</h3>
                         </div>
