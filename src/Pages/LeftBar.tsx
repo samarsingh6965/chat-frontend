@@ -45,7 +45,7 @@ const LeftBar: FC<LeftBarProps> = () => {
             <div className="w-full h-auto overflow-y-scroll scrollbar-thin scrollbar-thumb-sky-200">
                 {users?.map((user:IUsers) => (
                     <div key={user._id} className="w-full border-b flex gap-3 items-center p-2 hover:bg-sky-100">
-                        <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
+                        <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
                         <div className="flex flex-col cursor-pointer">
                             <h1 className='font-medium'>{user.name}</h1>
                             <h3 className='text-sm truncate'>{user.username}</h3>

@@ -36,7 +36,7 @@ const PreviewPop: FC<PreviewPopProps> = ({ open, setOpen, url, username}) => {
                         className="sm:w-[450px] relative rounded-lg shadow-2xl shadow-blue-100 flex flex-col gap-3 items-center sm:mx-0 mx-6 w-full sm:min-w-[450px] h-auto px-4 py-8 bg-white"
                     >
                         <div className="w-full h-full min-h-full min-w-full border relative">
-                            <img src={url} alt={'profile'} className='w-full h-full cursor-pointer' />
+                            <img src={url} alt={'profile'} className='w-full h-96 cursor-pointer' />
                         </div>
                         <button onClick={handleDownload} className="bg-blue-500 text-white py-1.5 px-4 rounded-lg">
                             Download
