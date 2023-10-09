@@ -8,7 +8,7 @@ import { IUsers } from '../TypesAndInterfaces/TypesAndInterfaces';
 import { BsArrowLeft } from 'react-icons/bs';
 
 interface RightHeaderProps {
-    userDetails: IUsers
+    userDetails: IUsers | undefined
 }
 
 const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
@@ -23,12 +23,19 @@ const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
         { id: 1, name: 'View Profile', click: handleProfile },
         { id: 2, name: 'Block', click: handleBlock },
     ]
-    
+
     return (
         <div className="w-full h-20 bg-sky-100 flex items-center justify-between px-3 border-b">
             <div className="flex items-center gap-3">
                 <span onClick={() => navigate('/home')} className='text-2xl cursor-pointer text-blue-600'><BsArrowLeft /></span>
-                <img src={userDetails.profileImage === null ? (userDetails.gender === 'male' ? maleavatar : userDetails.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${userDetails.profileImage.url}`} alt={'profile'} className='w-14 h-14 min-h-14 min-w-14 rounded-full' />
+                <img
+                    src={userDetails?.profileImage === null ? (userDetails?.gender === 'male' ? maleavatar : userDetails?.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${userDetails?.profileImage?.url}`}
+                    alt={userDetails?.profileImage === null ? 'avatar' : userDetails?.profileImage?.mimetype}
+                    className='w-14 h-14 min-h-14 min-w-14 rounded-full' />
+                <div className="flex flex-col items-start">
+                    <h1 className='text-lg font-medium'>{userDetails?.name}</h1>
+                    <h1 className='text-sm'>{userDetails?.bio}</h1>
+                </div>
             </div>
             <div className="flex items-center gap-2">
                 <ActionPop action={actios} icon='FiMoreVertical' />
