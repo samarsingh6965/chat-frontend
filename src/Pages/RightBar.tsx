@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../Services/http/http';
 import { toast } from 'react-toastify';
+import ChatPage from './ChatPage';
 
 interface RightBarProps { }
 
@@ -45,8 +46,8 @@ const RightBar: FC<RightBarProps> = () => {
                     <div className="w-full h-auto">
                         <RightHeader userDetails={user} />
                     </div>
-                    <div className="w-full">
-
+                    <div className="w-full h-auto overflow-y-scroll scrollbar-thin">
+                        <ChatPage />
                     </div>
                 </>
             }
