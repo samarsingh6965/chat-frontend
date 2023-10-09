@@ -9,6 +9,7 @@ import { responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../Services/http/http';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import loginlogo from '../Assets/loginlogo.png'
 
 interface LoginProps { }
 
@@ -49,10 +50,12 @@ const Login: FC<LoginProps> = () => {
         <div className='w-screen h-screen'>
             <div style={{ backgroundImage: `url(${BG})` }} className="w-full h-full bg-cover bg-repeat flex items-center justify-center">
                 <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1, dur: 0.2 }}
-                    exit={{ scale: 1 }}
-                    className="w-[340px] transition-all shadow-lg drop-shadow-lg shadow-gray-300 p-4 bg-white rounded-md">
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.7 }}
+                    className="w-full sm:w-[450px] sm:h-auto h-full transition-all shadow-none sm:shadow-lg drop-shadow-lg shadow-gray-300 sm:px-4 px-10 py-8 bg-white rounded-none sm:rounded-md flex flex-col gap-10 items-center justify-center">
+                    <img src={loginlogo} alt="logo" className='px-4'/>
                     <Formik
                         initialValues={{
                             username: '',
