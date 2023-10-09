@@ -37,7 +37,7 @@ const RightBar: FC<RightBarProps> = () => {
         // eslint-disable-next-line
     }, [userId])
     return (
-        <div className="w-full h-full relative">
+        <div className="w-full h-full">
             {loading ?
                 <Loader loader={loading} />
                 :

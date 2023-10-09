@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import maleavatar from '../Assets/maleavatar.jpg'
 import femaleavatar from '../Assets/femaleavatar.jpg'
 import otheravatar from '../Assets/otheravatar.jpg'
@@ -6,18 +6,20 @@ import ActionPop from '../Components/PopUp/ActionPop';
 import { useNavigate } from 'react-router-dom';
 import { IUsers } from '../TypesAndInterfaces/TypesAndInterfaces';
 import { BsArrowLeft } from 'react-icons/bs';
+import UserProfilePop from '../Components/PopUp/UserProfilePop';
 
 interface RightHeaderProps {
     userDetails: IUsers | undefined
 }
 
 const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
+    const [openProfile,setOpenProfile] = useState<boolean>(false)
     const navigate = useNavigate();
     const handleBlock = () => {
         window.alert('Clicked On Block.')
     }
     const handleProfile = () => {
-        window.alert('Clicked On View Profile.')
+        setOpenProfile(true);
     }
     const actios = [
         { id: 1, name: 'View Profile', click: handleProfile },
@@ -40,6 +42,7 @@ const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
             <div className="flex items-center gap-2">
                 <ActionPop action={actios} icon='FiMoreVertical' />
             </div>
+            {openProfile && <UserProfilePop open={openProfile} setOpen={setOpenProfile} userDetails={userDetails}/>}
         </div>
     );
 }

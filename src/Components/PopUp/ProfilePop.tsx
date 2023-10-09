@@ -9,7 +9,7 @@ import http from '../../Services/http/http';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup'
 import GenderRadioGroup from '../FormControl/GenderRadioGroup';
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import ActionPop from './ActionPop';
 import InputTextArea from '../FormControl/InputTextArea';
 import { BsArrowLeft } from 'react-icons/bs';
@@ -110,14 +110,14 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
         }
     }
     return (
-        <AnimatePresence>
+        <div>
             {open && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => setOpen(false)}
-                    className={`absolute z-50 left-0 top-0 w-screen flex items-center justify-center h-screen bg-black bg-opacity-70`}
+                    className={`fixed z-50 left-0 top-0 w-screen flex items-center justify-center h-screen bg-black bg-opacity-70`}
                 >
                     <motion.div
                         initial={{ opacity: 0, y: -70 }}
@@ -160,7 +160,7 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
             )}
             {openPreview && <PreviewPop open={openPreview} setOpen={setOpenPreview} url={imageURL} username={name}/>}
             {openEdit && <EditProfileImagePop open={openEdit} setOpen={setOpenEdit} />}
-        </AnimatePresence >
+        </div >
     );
 }
 
