@@ -38,12 +38,12 @@ const RightBar: FC<RightBarProps> = () => {
         // eslint-disable-next-line
     }, [userId])
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-screen">
             {loading ?
                 <Loader loader={loading} />
                 :
                 <>
-                    <div className="w-full h-auto">
+                    <div className="w-full h-auto sticky top-2 z-50">
                         <RightHeader userDetails={user} />
                     </div>
                     <div className="w-full h-auto overflow-y-scroll scrollbar-thin">
