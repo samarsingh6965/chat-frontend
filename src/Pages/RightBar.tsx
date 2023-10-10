@@ -43,10 +43,10 @@ const RightBar: FC<RightBarProps> = () => {
                 <Loader loader={loading} />
                 :
                 <>
-                    <div className="w-full h-auto sticky top-2 z-50">
+                    <div className="w-full h-[80px]">
                         <RightHeader userDetails={user} />
                     </div>
-                    <div className="w-full h-auto">
+                    <div className="w-full h-[92%]">
                         <ChatPage userDetails={user}/>
                     </div>
                 </>

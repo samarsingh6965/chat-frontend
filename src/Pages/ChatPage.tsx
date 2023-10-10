@@ -17,7 +17,8 @@ type MesssageMeta = {
 }
 
 const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
-    const { socket, containerRef } = useContext(DataContext);
+    const { socket } = useContext(DataContext);
+  const containerRef:React.MutableRefObject<null> = useRef(null); // Use 'null' initially
     const [messages, setMessages] = useState<any[]>([]);
     const loggedInUser = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]')
     const inputRef = useRef<HTMLInputElement | null>(null)
@@ -87,7 +88,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     }, []);
     const sendMessage = (): void => {
         socket?.emit('message', messagesJSON);
-        setMessages([...messages,messagesJSON]);
+        setMessages([...messages, messagesJSON]);
         socket?.emit('stop_typing', messagesJSON);
         setTyping(false);
     };
@@ -145,23 +146,24 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     // group by date
 
     // scroll bottom 
-    useEffect(() => {
-        scrollToBottom();
-        // eslint-disable-next-line
-    }, [messages]);
     const scrollToBottom = () => {
         if (containerRef.current) {
             const containerElement = containerRef.current as HTMLDivElement;
             containerElement.scrollTop = containerElement.scrollHeight;
         }
+
     };
+    useEffect(() => {
+        scrollToBottom();
+        // eslint-disable-next-line
+    }, [messages]);
 
     return (
-        <div className='w-full h-full'>
-            <div className="w-full h-auto px-4 pb-20">
+        <div className='w-full h-full flex flex-col'>
+            <div ref={containerRef} className="w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll">
                 {sortedGroupedMessages?.map((group: any) => (
                     <div key={group.date}>
-                        <div className='w-full py-1 flex items-center justify-center sticky top-24 z-20'>
+                        <div className='w-full py-1 flex items-center justify-center sticky top-2 z-20'>
                             <p className='text-xs bg-gray-200 px-2 py-1 rounded-md'>{moment(group.date).isSame(moment(), 'day')
                                 ? 'Today'
                                 : moment(group.date).isSame(moment().subtract(1, 'days'), 'day')
@@ -193,15 +195,13 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                     </div>
                 ))}
             </div>
-            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-16 z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
-            <div className='flex fixed px-3 pt-1 w-full gap-1 -mb-1.5 bottom-0 right-0 bg-white'>
-                <div className='flex justify-center w-[90%]'>
-                    <input
-                        ref={inputRef}
-                        onChange={(e) => handleTyping(e)}
-                        onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
-                        type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-full mb-3 bg-white text-gray-500' />
-                </div>
+            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[7%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
+            <div className='w-full h-[6%] flex items-center justify-center gap-2 bg-blue-400'>
+                <input
+                    ref={inputRef}
+                    onChange={(e) => handleTyping(e)}
+                    onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
+                    type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-[90%] bg-white text-gray-500' />
                 <div className='bg-blue-400 w-10 h-10 rounded-full flex justify-center items-center'>
                     <button type='submit' onClick={handleSend}><IoMdSend className=' text-lg text-white' /></button>
                 </div>

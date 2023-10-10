@@ -9,7 +9,7 @@ interface HomeProps { }
 
 const Home: FC<HomeProps> = () => {
     const { pathname } = useLocation();
-    const { setSocket,containerRef } = useContext(DataContext);
+    const { setSocket } = useContext(DataContext);
     const token: string | null = sessionStorage.getItem('token');
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const Home: FC<HomeProps> = () => {
                 <div className={`${pathname !== '/home' && 'hidden sm:block'} sm:w-[450px] w-full min-w-full sm:min-w-[450px] h-full border`}>
                     <LeftBar />
                 </div>
-                <div ref={containerRef} className={`w-full h-full bg-gray-100 overflow-y-scroll relative ${pathname !== '/home' && 'block'}`}>
+                <div className={`w-full h-full relative ${pathname !== '/home' && 'block'}`}>
                     {pathname === '/home' ?
                         <div style={{ backgroundImage: `url(${bgchat1})` }} className="w-full h-full blur-container"></div>
                         :
