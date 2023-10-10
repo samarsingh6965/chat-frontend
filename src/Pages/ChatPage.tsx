@@ -17,8 +17,8 @@ type MesssageMeta = {
 }
 
 const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
-    const { socket } = useContext(DataContext);
-    const [messages, setMessages] = useState<string[]>([]);
+    const { socket, containerRef } = useContext(DataContext);
+    const [messages, setMessages] = useState<any[]>([]);
     const loggedInUser = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]')
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [messagesJSON, setMessagesJSON] = useState<MesssageMeta>({ from: loggedInUser?._id, to: userDetails?._id });
@@ -56,6 +56,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
             }
         }
     }
+
     useEffect(() => {
         fetchMessages()
         // eslint-disable-next-line
@@ -86,6 +87,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     }, []);
     const sendMessage = (): void => {
         socket?.emit('message', messagesJSON);
+        setMessages([...messages,messagesJSON]);
         socket?.emit('stop_typing', messagesJSON);
         setTyping(false);
     };
@@ -143,11 +145,10 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     // group by date
 
     // scroll bottom 
-    const containerRef = useRef(null); // Use 'null' initially
     useEffect(() => {
         scrollToBottom();
         // eslint-disable-next-line
-    }, [messages, open]);
+    }, [messages]);
     const scrollToBottom = () => {
         if (containerRef.current) {
             const containerElement = containerRef.current as HTMLDivElement;
@@ -156,44 +157,44 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     };
 
     return (
-        <div ref={containerRef} className='w-full h-full'>
-                <div className="w-full h-full">
-                    {sortedGroupedMessages?.map((group: any) => (
-                        <div key={group.date}>
-                            <div className='w-full py-1 flex items-center justify-center sticky top-1 z-20'>
-                                <p className='text-xs bg-gray-100 px-2 py-1 rounded-md'>{moment(group.date).isSame(moment(), 'day')
-                                    ? 'Today'
-                                    : moment(group.date).isSame(moment().subtract(1, 'days'), 'day')
-                                        ? 'Yesterday'
-                                        : moment(group.date).format('MMM D, YYYY')}</p>
-                            </div>
-                            {group.messages?.sort((a: any, b: any): number => { const timeA = new Date(a.timestamp).getTime(); const timeB = new Date(b.timestamp).getTime(); return timeA - timeB; })?.map((message: any, index: number) => (
-                                <React.Fragment key={index}>
-                                    {
-                                        <div className={`flex gap-1 items-center ${message.from === loggedInUser?._id ? 'justify-end' : 'justify-start'} my-2 text-sm`}>
-                                            <div className={`flex gap-4 ${message.from !== loggedInUser?._id && 'flex-row-reverse'}`}>
-                                                <p className={`py-1.5 flex gap-3 rounded-b-md px-2 drop-shadow-2xl relative ${message.from === loggedInUser?._id ? 'bg-green-100 rounded-tl-md' : 'bg-white rounded-tr-md'}`}>
-                                                    {message.message}
-                                                    <span className='text-[10px] leading-none flex items-end'> {moment(message?.timestamp).format('h:mm A')}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    }
-                                </React.Fragment>
-                            ))}
-                            {isTyping === true ?
-                                <div className="flex items-center justify-center w-16 border h-8 rounded-2xl">
-                                    <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
-                                    <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
-                                    <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
-                                </div>
-                                : null
-                            }
+        <div className='w-full h-full'>
+            <div className="w-full h-auto px-4 pb-20">
+                {sortedGroupedMessages?.map((group: any) => (
+                    <div key={group.date}>
+                        <div className='w-full py-1 flex items-center justify-center sticky top-24 z-20'>
+                            <p className='text-xs bg-gray-200 px-2 py-1 rounded-md'>{moment(group.date).isSame(moment(), 'day')
+                                ? 'Today'
+                                : moment(group.date).isSame(moment().subtract(1, 'days'), 'day')
+                                    ? 'Yesterday'
+                                    : moment(group.date).format('MMM D, YYYY')}</p>
                         </div>
-                    ))}
-                </div>
-                <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-20 z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
-            <div className='flex px-3 pt-1 w-full gap-1 -mb-1.5 bottom-0 right-0 bg-white'>
+                        {group.messages?.sort((a: any, b: any): number => { const timeA = new Date(a.timestamp).getTime(); const timeB = new Date(b.timestamp).getTime(); return timeA - timeB; })?.map((message: any, index: number) => (
+                            <React.Fragment key={index}>
+                                {
+                                    <div className={`flex gap-1 items-center ${message.from === loggedInUser?._id ? 'justify-end' : 'justify-start'} my-2 text-sm`}>
+                                        <div className={`flex gap-4 ${message.from !== loggedInUser?._id && 'flex-row-reverse'}`}>
+                                            <p className={`py-1.5 flex gap-3 rounded-b-md px-2 drop-shadow-2xl relative ${message.from === loggedInUser?._id ? 'bg-green-100 rounded-tl-md' : 'bg-white rounded-tr-md'}`}>
+                                                {message.message}
+                                                <span className='text-[10px] leading-none flex items-end'> {moment(message?.timestamp).format('h:mm A')}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </React.Fragment>
+                        ))}
+                        {isTyping === true ?
+                            <div className="flex items-center justify-center w-16 border h-8 rounded-2xl">
+                                <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                                <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                                <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                            </div>
+                            : null
+                        }
+                    </div>
+                ))}
+            </div>
+            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-16 z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
+            <div className='flex fixed px-3 pt-1 w-full gap-1 -mb-1.5 bottom-0 right-0 bg-white'>
                 <div className='flex justify-center w-[90%]'>
                     <input
                         ref={inputRef}

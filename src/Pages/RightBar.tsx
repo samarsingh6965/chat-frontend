@@ -38,7 +38,7 @@ const RightBar: FC<RightBarProps> = () => {
         // eslint-disable-next-line
     }, [userId])
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-full">
             {loading ?
                 <Loader loader={loading} />
                 :
@@ -46,7 +46,7 @@ const RightBar: FC<RightBarProps> = () => {
                     <div className="w-full h-auto sticky top-2 z-50">
                         <RightHeader userDetails={user} />
                     </div>
-                    <div className="w-full h-auto overflow-y-scroll scrollbar-thin">
+                    <div className="w-full h-auto">
                         <ChatPage userDetails={user}/>
                     </div>
                 </>
