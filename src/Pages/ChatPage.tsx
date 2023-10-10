@@ -69,12 +69,19 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
             console.log('Connected to the WebSocket server', socket?.id);
         });
         socket?.on('message', (newMessage: any) => {
-            setMessages(prevMessages => [...prevMessages, newMessage]);
+            if(newMessage.from === userDetails?._id){
+                setMessages(prevMessages => [...prevMessages, newMessage]);
+            }else{
+                // notification logic here
+                console.log('message from other chat')
+            }
         });
         // typing
-        socket?.on("typing", (messageJson: any) => {
-            if (messageJson?.from !== loggedInUser._id) {
+        socket?.on("typing", (newMessage: any) => {
+            if (newMessage?.from === userDetails?._id) {
                 setIsTyping(true)
+            }else{
+                console.log('someone else is typing...')
             }
         })
         socket?.on("stop_typing", () => {
