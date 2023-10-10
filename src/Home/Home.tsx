@@ -1,12 +1,27 @@
-import type { FC } from 'react';
+import { useContext, type FC, useEffect } from 'react';
 import LeftBar from '../Pages/LeftBar';
 import { Outlet, useLocation } from 'react-router-dom';
 import bgchat1 from '../Assets/bgchat1.jpeg'
+import { DataContext } from '../Context/DataProvider';
+import { io } from 'socket.io-client';
 
 interface HomeProps { }
 
 const Home: FC<HomeProps> = () => {
     const { pathname } = useLocation();
+    const { setSocket } = useContext(DataContext);
+    const token: string | null = sessionStorage.getItem('token');
+
+    useEffect(() => {
+        const socket = io('http://localhost:5000', {
+            extraHeaders: {
+                token: token || ''
+            }
+        });
+        setSocket(socket);
+        // eslint-disable-next-line
+    }, [])
+
     return (
         <div className="w-screen h-screen">
             <div className={`w-full h-full bg-gray-100 p-2 relative flex gap-2`}>
@@ -15,7 +30,7 @@ const Home: FC<HomeProps> = () => {
                 </div>
                 <div className={`w-full h-full relative ${pathname !== '/home' && 'block'}`}>
                     {pathname === '/home' ?
-                        <div style={{backgroundImage:`url(${bgchat1})`}} className="w-full h-full blur-container"></div>
+                        <div style={{ backgroundImage: `url(${bgchat1})` }} className="w-full h-full blur-container"></div>
                         :
                         <Outlet />}
                 </div>

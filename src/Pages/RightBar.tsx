@@ -47,7 +47,7 @@ const RightBar: FC<RightBarProps> = () => {
                         <RightHeader userDetails={user} />
                     </div>
                     <div className="w-full h-auto overflow-y-scroll scrollbar-thin">
-                        <ChatPage />
+                        <ChatPage userDetails={user}/>
                     </div>
                 </>
             }
