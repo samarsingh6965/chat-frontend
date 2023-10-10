@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useContext, type FC } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import InputPassword from '../Components/FormControl/InputPassword';
@@ -10,11 +10,14 @@ import http from '../Services/http/http';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import loginlogo from '../Assets/loginlogo.png'
+import { DataContext } from '../Context/DataProvider';
+import { io } from 'socket.io-client';
 
 interface LoginProps { }
 
 const Login: FC<LoginProps> = () => {
     const navigate = useNavigate();
+    const { setSocket } = useContext(DataContext);
     const handleSubmit = async (values: { username: string, password: string }) => {
         try {
             const response: responseType = await http({
@@ -26,6 +29,12 @@ const Login: FC<LoginProps> = () => {
                 sessionStorage.setItem('token', response.data.data.token);
                 sessionStorage.setItem('userDetails', JSON.stringify(response.data.data.userDetail))
                 setTimeout(() => {
+                    const socket = io('http://localhost:5000', {
+                        extraHeaders: {
+                            token: response.data.data.token || ''
+                        }
+                    });
+                    setSocket(socket);
                     navigate('/home')
                 }, 2000);
                 toast.success(response?.data?.message)
@@ -55,7 +64,7 @@ const Login: FC<LoginProps> = () => {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.7 }}
                     className="w-full sm:w-[450px] sm:h-auto h-full transition-all shadow-none sm:shadow-lg drop-shadow-lg shadow-gray-300 sm:px-4 px-10 py-8 bg-white rounded-none sm:rounded-md flex flex-col gap-10 items-center justify-center">
-                    <img src={loginlogo} alt="logo" className='px-4'/>
+                    <img src={loginlogo} alt="logo" className='px-4' />
                     <Formik
                         initialValues={{
                             username: '',

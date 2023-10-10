@@ -92,6 +92,13 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
         socket?.emit('stop_typing', messagesJSON);
         setTyping(false);
     };
+    useEffect(()=>{
+        const ActiveChat = (): void => {
+            socket?.emit('active_chat', messagesJSON);
+        };
+        ActiveChat();
+        // eslint-disable-next-line
+    },[userDetails])
     const handleSend = () => {
         sendMessage()
         if (inputRef.current) {
@@ -196,14 +203,14 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                 ))}
             </div>
             <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[7%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
-            <div className='w-full h-[6%] flex items-center justify-center gap-2 bg-blue-400'>
+            <div className='w-full h-[6%] flex items-center justify-center gap-2'>
                 <input
                     ref={inputRef}
                     onChange={(e) => handleTyping(e)}
                     onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
                     type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-[90%] bg-white text-gray-500' />
                 <div className='bg-blue-400 w-10 h-10 rounded-full flex justify-center items-center'>
-                    <button type='submit' onClick={handleSend}><IoMdSend className=' text-lg text-white' /></button>
+                    <button type='submit' onClick={handleSend}><IoMdSend className='text-lg text-white' /></button>
                 </div>
             </div>
         </div>
