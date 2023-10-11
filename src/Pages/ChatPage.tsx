@@ -18,13 +18,15 @@ type MesssageMeta = {
 
 const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     const { socket } = useContext(DataContext);
-  const containerRef:React.MutableRefObject<null> = useRef(null); // Use 'null' initially
+    const containerRef: React.MutableRefObject<null> = useRef(null); // Use 'null' initially
     const [messages, setMessages] = useState<any[]>([]);
     const loggedInUser = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]')
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [messagesJSON, setMessagesJSON] = useState<MesssageMeta>({ from: loggedInUser?._id, to: userDetails?._id });
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
+    // const [isInputActive, setInputActive] = useState(false);
+    // console.log(isInputActive)
 
     const fetchMessages = async () => {
         try {
@@ -69,9 +71,9 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
             console.log('Connected to the WebSocket server', socket?.id);
         });
         socket?.on('message', (newMessage: any) => {
-            if(newMessage.from === userDetails?._id){
+            if (newMessage.from === userDetails?._id) {
                 setMessages(prevMessages => [...prevMessages, newMessage]);
-            }else{
+            } else {
                 // notification logic here
                 console.log('message from other chat')
             }
@@ -80,7 +82,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
         socket?.on("typing", (newMessage: any) => {
             if (newMessage?.from === userDetails?._id) {
                 setIsTyping(true)
-            }else{
+            } else {
                 console.log('someone else is typing...')
             }
         })
@@ -99,13 +101,13 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
         socket?.emit('stop_typing', messagesJSON);
         setTyping(false);
     };
-    useEffect(()=>{
+    useEffect(() => {
         const ActiveChat = (): void => {
             socket?.emit('active_chat', messagesJSON);
         };
         ActiveChat();
         // eslint-disable-next-line
-    },[userDetails])
+    }, [userDetails])
     const handleSend = () => {
         sendMessage()
         if (inputRef.current) {
@@ -173,8 +175,8 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     }, [messages]);
 
     return (
-        <div className='w-full h-full flex flex-col'>
-            <div ref={containerRef} className="w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll">
+        <div className={`w-full h-full flex flex-col`}>
+            <div ref={containerRef} className={`w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll`}>
                 {sortedGroupedMessages?.map((group: any) => (
                     <div key={group.date}>
                         <div className='w-full py-1 flex items-center justify-center sticky top-2 z-20'>
@@ -200,9 +202,9 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                         ))}
                         {isTyping === true ?
                             <div className="flex items-center justify-center w-16 border h-8 rounded-2xl">
-                                <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
-                                <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
-                                <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                                <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
+                                <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
+                                <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
                             </div>
                             : null
                         }
@@ -213,6 +215,8 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
             <div className='w-full h-[6%] flex items-center justify-center gap-2'>
                 <input
                     ref={inputRef}
+                    // onFocus={() => setInputActive(true)}
+                    // onBlur={() => setInputActive(false)}
                     onChange={(e) => handleTyping(e)}
                     onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
                     type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-[90%] bg-white text-gray-500' />
