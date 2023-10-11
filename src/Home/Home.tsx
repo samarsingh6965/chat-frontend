@@ -50,7 +50,8 @@ const Home: FC<HomeProps> = () => {
         });
 
         socket?.on('notification', (data: any) => {
-            setNotifications([...notifications,data]);
+            console.log('notify',data)
+            setNotifications((prevNotifications) => [...prevNotifications, data]);
         });
 
         setSocket(socket);

@@ -96,10 +96,13 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
         // eslint-disable-next-line
     }, []);
     const sendMessage = (): void => {
-        socket?.emit('message', messagesJSON);
-        setMessages([...messages, messagesJSON]);
-        socket?.emit('stop_typing', messagesJSON);
-        setTyping(false);
+        if(messagesJSON.message !== ''){
+            socket?.emit('message', messagesJSON);
+            setMessages([...messages, messagesJSON]);
+            socket?.emit('stop_typing', messagesJSON);
+            setMessagesJSON({...messagesJSON,message:''})
+            setTyping(false);
+        }
     };
     useEffect(() => {
         const ActiveChat = (): void => {
