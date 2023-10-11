@@ -23,7 +23,7 @@ const Home: FC<HomeProps> = () => {
             const response: responseType = await http({
                 url: '/notification/getNotifications',
                 method: 'get',
-                data:{to:userDetails._id}
+                data: { to: userDetails._id }
             });
             if (response.data?.code === 'SUCCESS_200') {
                 setNotifications(response.data.data)
@@ -50,8 +50,21 @@ const Home: FC<HomeProps> = () => {
         });
 
         socket?.on('notification', (data: any) => {
-            console.log('notify',data)
-            setNotifications((prevNotifications) => [...prevNotifications, data]);
+            console.log('notify', data)
+            const includesObjectWithKey = notifications.find((notification: any) => notification?.from === data.from) ? true : false;
+            console.log(includesObjectWithKey)
+            if (includesObjectWithKey) {
+                console.log('exist')
+                // setNotifications((prevNotifications) => prevNotifications.map((notification) => {
+                //     if (notification['from'] === data.from) {
+                //         return data; // Replace the existing object
+                //     }
+                //     return notification; // Keep other objects unchanged
+                // }));
+            } else {
+                console.log('new')
+                setNotifications((prevNotifications) => [...prevNotifications, data]);
+            }
         });
 
         setSocket(socket);
@@ -61,7 +74,7 @@ const Home: FC<HomeProps> = () => {
     return (
         <div className="w-screen h-screen">
             <div className={`w-full h-full p-2 relative flex gap-2`}>
-                <NotificationIcon count={notifications?.length}/>
+                <NotificationIcon count={notifications?.length} />
                 <div className={`${pathname !== '/home' && 'hidden sm:block'} sm:w-[450px] w-full min-w-full sm:min-w-[450px] h-full border`}>
                     <LeftBar />
                 </div>
