@@ -4,6 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import bgchat1 from '../Assets/bgchat1.jpeg'
 import { DataContext } from '../Context/DataProvider';
 import { io } from 'socket.io-client';
+import NotificationIcon from '../Components/NotificationIcon';
 
 interface HomeProps { }
 
@@ -25,6 +26,7 @@ const Home: FC<HomeProps> = () => {
     return (
         <div className="w-screen h-screen">
             <div className={`w-full h-full p-2 relative flex gap-2`}>
+                <NotificationIcon/>
                 <div className={`${pathname !== '/home' && 'hidden sm:block'} sm:w-[450px] w-full min-w-full sm:min-w-[450px] h-full border`}>
                     <LeftBar />
                 </div>

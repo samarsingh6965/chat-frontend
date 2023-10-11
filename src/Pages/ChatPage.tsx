@@ -75,7 +75,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                 setMessages(prevMessages => [...prevMessages, newMessage]);
             } else {
                 // notification logic here
-                console.log('message from other chat')
+                socket?.emit('notification',newMessage)
             }
         });
         // typing
