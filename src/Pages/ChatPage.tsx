@@ -200,7 +200,9 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                                 }
                             </React.Fragment>
                         ))}
-                        {isTyping === true ?
+                    </div>
+                ))}
+                {isTyping === true ?
                             <div className="flex items-center justify-center w-16 border h-8 rounded-2xl">
                                 <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
                                 <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
@@ -208,8 +210,6 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                             </div>
                             : null
                         }
-                    </div>
-                ))}
             </div>
             <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[7%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
             <div className='w-full h-[6%] flex items-center justify-center gap-2'>
