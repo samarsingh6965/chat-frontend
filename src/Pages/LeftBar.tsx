@@ -50,7 +50,7 @@ const LeftBar: FC<LeftBarProps> = () => {
                         <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
                         <div onClick={() => navigate(`/home/chat/${user._id}`)} className="flex flex-col cursor-pointer">
                             <h1 className='font-medium'>{user.name}</h1>
-                            <h3 className='text-sm truncate'>{user.username}</h3>
+                            <h3 className='text-sm truncate'>{user.lastMessage?.message ?? user.bio}</h3>
                         </div>
                     </div>
                 ))}

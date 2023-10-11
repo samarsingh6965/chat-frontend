@@ -6,4 +6,4 @@ export type responseType = {
     }
 };
 
-export interface IUsers { _id: string,name:string, username?: string, email?: string ,gender?:string,bio?:string,profileImage:{_id:string,url:string,mimetype:string}|null}
+export interface IUsers { _id: string,name:string, username?: string, email?: string ,gender?:string,bio?:string,profileImage:{_id:string,url:string,mimetype:string}|null,lastMessage:{_id:string,message:string,timestamp:string}|null}
