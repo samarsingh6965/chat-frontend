@@ -1,11 +1,12 @@
 import { useState, type FC, useEffect } from 'react';
 import RightHeader from './RightHeader';
-import Loader from '../Components/Loader';
 import { useParams } from 'react-router-dom';
 import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../Services/http/http';
 import { toast } from 'react-toastify';
 import ChatPage from './ChatPage';
+import RightHeaderSkeleton from '../Components/Skeletons/RightHeaderSkeleton';
+import ChatPageSkeleton from '../Components/Skeletons/ChatPageSkeleton';
 
 interface RightBarProps { }
 
@@ -34,23 +35,27 @@ const RightBar: FC<RightBarProps> = () => {
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
-        }, 500);
+        }, 2000);
         // eslint-disable-next-line
     }, [userId])
     return (
-        <div className="w-full h-full">
-            {loading ?
-                <Loader loader={loading} />
-                :
-                <>
-                    <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
-                        <RightHeader userDetails={user} />
-                    </div>
-                    <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
-                        <ChatPage userDetails={user}/>
-                    </div>
-                </>
-            }
+        <div className="w-full h-full relative">
+            <div className={`${loading ? 'h-full w-full absolute top-0 z-50' : 'hidden'}`}>
+                <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
+                    <RightHeaderSkeleton />
+                </div>
+                <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
+                    <ChatPageSkeleton />
+                </div>
+            </div>
+            <div className="w-full h-full">
+                <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
+                    <RightHeader userDetails={user} />
+                </div>
+                <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
+                    <ChatPage userDetails={user} />
+                </div>
+            </div>
         </div>
     );
 }
