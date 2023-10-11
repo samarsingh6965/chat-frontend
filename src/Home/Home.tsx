@@ -1,4 +1,4 @@
-import { useContext, type FC, useEffect } from 'react';
+import { useContext, type FC, useEffect, useState } from 'react';
 import LeftBar from '../Pages/LeftBar';
 import { Outlet, useLocation } from 'react-router-dom';
 import bgchat1 from '../Assets/bgchat1.jpeg'
@@ -12,6 +12,7 @@ const Home: FC<HomeProps> = () => {
     const { pathname } = useLocation();
     const { setSocket } = useContext(DataContext);
     const token: string | null = sessionStorage.getItem('token');
+    const [notificationCount, setNotificationCount] = useState<number>(0);
 
     useEffect(() => {
         const socket = io('http://localhost:5000', {
@@ -19,6 +20,14 @@ const Home: FC<HomeProps> = () => {
                 token: token || ''
             }
         });
+        socket?.on('connect', () => {
+            console.log('Connected to the WebSocket server from notification icon', socket?.id);
+        });
+
+        socket?.on('notification', (data: any) => {
+            setNotificationCount(prevCount => prevCount + 1);
+        });
+
         setSocket(socket);
         // eslint-disable-next-line
     }, [])
@@ -26,7 +35,7 @@ const Home: FC<HomeProps> = () => {
     return (
         <div className="w-screen h-screen">
             <div className={`w-full h-full p-2 relative flex gap-2`}>
-                <NotificationIcon/>
+                <NotificationIcon count={notificationCount}/>
                 <div className={`${pathname !== '/home' && 'hidden sm:block'} sm:w-[450px] w-full min-w-full sm:min-w-[450px] h-full border`}>
                     <LeftBar />
                 </div>

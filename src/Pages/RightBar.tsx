@@ -41,7 +41,7 @@ const RightBar: FC<RightBarProps> = () => {
     return (
         <div className="w-full h-full">
             {loading ?
-                <div className={`h-full w-full`}>
+                <div className={`h-full w-full z-50 fixed`}>
                     <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
                         <RightHeaderSkeleton />
                     </div>
