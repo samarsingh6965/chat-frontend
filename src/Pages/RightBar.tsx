@@ -39,23 +39,26 @@ const RightBar: FC<RightBarProps> = () => {
         // eslint-disable-next-line
     }, [userId])
     return (
-        <div className="w-full h-full relative">
-            <div className={`${loading ? 'h-full w-full absolute top-0 z-50' : 'hidden'}`}>
-                <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
-                    <RightHeaderSkeleton />
+        <div className="w-full h-full">
+            {loading ?
+                <div className={`h-full w-full`}>
+                    <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
+                        <RightHeaderSkeleton />
+                    </div>
+                    <div className="w-full h-full pt-[85px] mt-[5px] sm:pt-0 sm:h-[91%]">
+                        <ChatPageSkeleton />
+                    </div>
                 </div>
-                <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
-                    <ChatPageSkeleton />
-                </div>
-            </div>
-            <div className="w-full h-full">
-                <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
-                    <RightHeader userDetails={user} />
-                </div>
-                <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
-                    <ChatPage userDetails={user} />
-                </div>
-            </div>
+                :
+                <>
+                    <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
+                        <RightHeader userDetails={user} />
+                    </div>
+                    <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
+                        <ChatPage userDetails={user} />
+                    </div>
+                </>
+            }
         </div>
     );
 }

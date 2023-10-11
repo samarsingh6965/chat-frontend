@@ -211,7 +211,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                             : null
                         }
             </div>
-            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[7%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
+            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
             <div className='w-full h-[6%] flex items-center justify-center gap-2'>
                 <input
                     ref={inputRef}
