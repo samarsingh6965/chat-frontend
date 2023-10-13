@@ -16,7 +16,6 @@ const Home: FC<HomeProps> = () => {
     const { setSocket } = useContext(DataContext);
     const token: string | null = sessionStorage.getItem('token');
     const [notifications, setNotifications] = useState<any[]>([]);
-    console.log(notifications)
     const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]')
     const fetchUsers = async () => {
         try {
@@ -49,28 +48,18 @@ const Home: FC<HomeProps> = () => {
             console.log('Connected to the WebSocket server from notification icon', socket?.id);
         });
 
-        socket?.on('notification', (data: any) => {
-            console.log('notify', data)
-            const includesObjectWithKey = notifications.find((notification: any) => notification?.from === data.from) ? true : false;
-            console.log(includesObjectWithKey)
-            if (includesObjectWithKey) {
-                console.log('exist')
-                // setNotifications((prevNotifications) => prevNotifications.map((notification) => {
-                //     if (notification['from'] === data.from) {
-                //         return data; // Replace the existing object
-                //     }
-                //     return notification; // Keep other objects unchanged
-                // }));
-            } else {
-                console.log('new')
-                setNotifications((prevNotifications) => [...prevNotifications, data]);
-            }
+        socket?.on('notification', async (data: any) => {
+            setNotifications((prevNotifications) =>
+                prevNotifications.map((notification) =>
+                    notification.from === data.from ? data : notification
+                )
+            );
         });
 
         setSocket(socket);
         // eslint-disable-next-line
     }, [])
-
+    
     return (
         <div className="w-screen h-screen">
             <div className={`w-full h-full p-2 relative flex gap-2`}>

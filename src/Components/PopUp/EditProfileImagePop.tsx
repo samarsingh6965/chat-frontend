@@ -12,8 +12,8 @@ interface EditProfileImagePopProps {
 }
 
 const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) => {
-    const [uploadedImage, setUploadedImage] = useState<{ _id: string, url: string, mimetype: string } | null>(null)
     const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]');
+    const [uploadedImage, setUploadedImage] = useState<{ _id: string, url: string, mimetype: string } | null>(userDetails?.profileImage ?? null)
     const handleChildClickPrevent = (event: MouseEvent) => {
         event.stopPropagation();
     }
@@ -27,6 +27,8 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
             if (response?.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
                 setUploadedImage(null)
+                setOpen(false)
+                sessionStorage.setItem('userDetails', JSON.stringify(response.data.data));
             } else {
                 toast.error(response?.data?.message);
             }
@@ -71,8 +73,6 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
             if (response?.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
                 setUploadedImage(null)
-                setOpen(false)
-                sessionStorage.setItem('userDetails', JSON.stringify(response.data.data));
             } else {
                 toast.error(response?.data?.message);
             }
