@@ -70,25 +70,19 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
         socket?.on('connect', () => {
             console.log('Connected to the WebSocket server', socket?.id);
         });
+
         socket?.on('message', (newMessage: any) => {
-            if (newMessage.from === userDetails?._id) {
-                setMessages(prevMessages => [...prevMessages, newMessage]);
-            } else {
-                // notification logic here
-                socket?.emit('notification',newMessage)
-            }
+            setMessages(prevMessages => [...prevMessages, newMessage]);
         });
         // typing
         socket?.on("typing", (newMessage: any) => {
-            if (newMessage?.from === userDetails?._id) {
-                setIsTyping(true)
-            } else {
-                console.log('someone else is typing...')
-            }
+            setIsTyping(true)
         })
         socket?.on("stop_typing", () => {
             setIsTyping(false)
         })
+
+        socket?.emit('activeChat', messagesJSON);
 
         return () => {
             socket?.off('message');
@@ -96,21 +90,15 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
         // eslint-disable-next-line
     }, []);
     const sendMessage = (): void => {
-        if(messagesJSON.message !== ''){
+        if (messagesJSON.message !== '') {
             socket?.emit('message', messagesJSON);
             setMessages([...messages, messagesJSON]);
             socket?.emit('stop_typing', messagesJSON);
-            setMessagesJSON({...messagesJSON,message:''})
+            setMessagesJSON({ ...messagesJSON, message: '' });
             setTyping(false);
         }
     };
-    useEffect(() => {
-        const ActiveChat = (): void => {
-            socket?.emit('active_chat', messagesJSON);
-        };
-        ActiveChat();
-        // eslint-disable-next-line
-    }, [userDetails])
+
     const handleSend = () => {
         sendMessage()
         if (inputRef.current) {
@@ -206,13 +194,13 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                     </div>
                 ))}
                 {isTyping === true ?
-                            <div className="flex items-center justify-center w-16 border h-8 rounded-2xl">
-                                <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
-                                <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
-                                <p className='flex items-center justify-center animate-bounce'><GoDotFill/></p>
-                            </div>
-                            : null
-                        }
+                    <div className="flex items-center justify-center w-16 border h-8 rounded-2xl">
+                        <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                        <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                        <p className='flex items-center justify-center animate-bounce'><GoDotFill /></p>
+                    </div>
+                    : null
+                }
             </div>
             <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
             <div className='w-full h-[6%] flex items-center justify-center gap-2'>
