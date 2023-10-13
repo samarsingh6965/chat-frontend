@@ -57,6 +57,9 @@ const Home: FC<HomeProps> = () => {
         });
 
         setSocket(socket);
+        return () => {
+            socket.off('notification')
+        }
         // eslint-disable-next-line
     }, [])
     
