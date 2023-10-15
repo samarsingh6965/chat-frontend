@@ -59,9 +59,35 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
             }
         }
     }
+    const updateMessages = async () => {
+        try {
+            const response: responseType = await http({
+                url: '/message/updateMessages',
+                method: 'put',
+                data: {
+                    from: userDetails?._id,
+                    to: loggedInUser?._id
+                }
+            });
+            if (response?.data?.code === 'SUCCESS_200') {
+                // toast.success(response?.data?.message)
+            } else {
+                toast.error(response?.data?.message);
+            }
+        } catch (error: any) {
+            if (error.response) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                toast.error('Error updating Chats.');
+            }
+        }
+    }
 
     useEffect(() => {
         fetchMessages()
+        setTimeout(() => {
+            updateMessages();
+        }, 3000);
         // eslint-disable-next-line
     }, []);
 

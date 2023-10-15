@@ -7,7 +7,7 @@ import otheravatar from '../Assets/otheravatar.jpg'
 import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../Services/http/http';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface LeftBarProps { }
 
@@ -15,6 +15,7 @@ const LeftBar: FC<LeftBarProps> = () => {
     const [users, setUsers] = useState<IUsers[] | null>(null)
     const [search,setSearch] = useState<string>('')
     const navigate = useNavigate();
+    const {pathname} = useLocation();
     const fetchUsers = async () => {
         try {
             const response: responseType = await http({
@@ -34,7 +35,7 @@ const LeftBar: FC<LeftBarProps> = () => {
     useEffect(() => {
         fetchUsers()
         // eslint-disable-next-line
-    }, [search])
+    }, [search,pathname])
     return (
         <div className="w-full h-full flex flex-col bg-blue-100">
             <div className="w-full">
@@ -50,7 +51,7 @@ const LeftBar: FC<LeftBarProps> = () => {
                         <img onClick={() => { window.alert('Clicked on Profile.') }} src={user.profileImage === null ? (user.gender === 'male' ? maleavatar : user.gender === 'female' ? femaleavatar : otheravatar) : `http://localhost:5000/api/${user.profileImage.url}`} alt={'profile'} className='w-12 h-12 min-h-12 min-w-12 rounded-full cursor-pointer' />
                         <div onClick={() => navigate(`/home/chat/${user._id}`)} className="flex flex-col cursor-pointer">
                             <h1 className='font-medium'>{user.name}</h1>
-                            <h3 className='text-sm truncate'>{user.lastMessage?.message ?? user.bio}</h3>
+                            <h3 className={`${user?.lastMessage?.seen === false ? 'font-bold' : 'font-normal'} text-sm truncate`}>{user.lastMessage?.message ?? user.bio}</h3>
                         </div>
                     </div>
                 ))}
