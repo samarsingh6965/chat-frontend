@@ -4,10 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import bgchat1 from '../Assets/bgchat1.jpeg'
 import { DataContext } from '../Context/DataProvider';
 import { io } from 'socket.io-client';
-import NotificationIcon from '../Components/NotificationIcon';
-import { responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
-import http from '../Services/http/http';
-import { toast } from 'react-toastify';
+import { motion } from 'framer-motion'
 
 interface HomeProps { }
 
@@ -15,29 +12,9 @@ const Home: FC<HomeProps> = () => {
     const { pathname } = useLocation();
     const { setSocket } = useContext(DataContext);
     const token: string | null = sessionStorage.getItem('token');
-    const [notifications, setNotifications] = useState<any[]>([]);
-    const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]')
-    const fetchUsers = async () => {
-        try {
-            const response: responseType = await http({
-                url: '/notification/getNotifications',
-                method: 'get',
-                data: { to: userDetails._id }
-            });
-            if (response.data?.code === 'SUCCESS_200') {
-                setNotifications(response.data.data)
-            } else {
-                toast.error(response?.data?.message)
-            }
-        } catch (error: ErrorCallback | unknown) {
-            toast.error((error as any)?.response?.data?.message);
-        }
-    }
-    useEffect(() => {
-        fetchUsers()
-        // eslint-disable-next-line
-    }, []);
-
+    const [notifications, setNotifications] = useState<any>({});
+    const [showNotification, setShowNotification] = useState<boolean>(false);
+    
     useEffect(() => {
         const socket = io('http://localhost:5000', {
             extraHeaders: {
@@ -47,13 +24,13 @@ const Home: FC<HomeProps> = () => {
         socket?.on('connect', () => {
             console.log('Connected to the WebSocket server from notification icon', socket?.id);
         });
-
-        socket?.on('notification', async (data: any) => {
-            setNotifications((prevNotifications) =>
-                prevNotifications.map((notification) =>
-                    notification.from === data.from ? data : notification
-                )
-            );
+        socket?.on('notification', (data: any) => {
+            console.log('ntfc', data)
+            setNotifications(data);
+            setShowNotification(true);
+            setTimeout(() => {
+                setShowNotification(false);
+            }, 5000);
         });
 
         setSocket(socket);
@@ -62,11 +39,40 @@ const Home: FC<HomeProps> = () => {
         }
         // eslint-disable-next-line
     }, [])
-    
+
+    const variants = {
+        hidden: {
+            translateY: -100,
+            opacity: 0,
+        },
+        visible: {
+            translateY: 0,
+            opacity: 1,
+            transition: {
+                duration: 0.3,
+            },
+        },
+    };
+
+
     return (
         <div className="w-screen h-screen">
+            {showNotification === true &&
+                <motion.div
+                    className={`w-full fixed top-2 transition-all duration-1000 h-20 bg-sky-200 z-50 flex flex-col px-4 py-2 justify-center`}
+                    initial="hidden"
+                    animate={showNotification ? "visible" : "hidden"}
+                    variants={variants}
+                >
+                    <h1 className="text-lg font-semibold">
+                        {notifications?.from?.name}
+                    </h1>
+                    <p>
+                        {notifications?.lastMessage?.message}
+                    </p>
+                </motion.div>
+            }
             <div className={`w-full h-full p-2 relative flex gap-2`}>
-                <NotificationIcon count={notifications?.length} />
                 <div className={`${pathname !== '/home' && 'hidden sm:block'} sm:w-[450px] w-full min-w-full sm:min-w-[450px] h-full border`}>
                     <LeftBar />
                 </div>
@@ -77,7 +83,7 @@ const Home: FC<HomeProps> = () => {
                         <Outlet />}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
