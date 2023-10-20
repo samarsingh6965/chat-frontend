@@ -104,7 +104,7 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
                         {uploadedImage !== null ?
                             <div className="w-full h-96 rounded-md border relative">
                                 <span onClick={handleDeleteImage} className='w-5 h-5 flex items-center justify-center absolute cursor-pointer -top-2 -right-2 rounded-full bg-gray-200 text-gray-700 text-sm border border-black'><RxCross2 /></span>
-                                <img src={`http://localhost:5000/api/${uploadedImage?.url}`} alt={uploadedImage?.mimetype} className='w-full h-full' />
+                                <img src={`${process.env.REACT_APP_API_URL}/${uploadedImage?.url}`} alt={uploadedImage?.mimetype} className='w-full h-full' />
                             </div>
                             :
                             <ImageUploadInput onImageUpload={handleImageUpload} />
