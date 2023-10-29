@@ -54,7 +54,7 @@ const Login: FC<LoginProps> = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.7 }}
-                    className="w-full sm:w-[450px] sm:h-auto h-full transition-all shadow-none sm:shadow-lg drop-shadow-lg shadow-gray-300 sm:px-4 px-10 py-8 bg-white rounded-none sm:rounded-md flex flex-col gap-10 items-center justify-center">
+                    className="w-full sm:w-[450px] sm:h-auto h-full transition-all shadow-none sm:shadow-lg drop-shadow-lg shadow-gray-300 px-4 py-8 bg-white rounded-none sm:rounded-md flex flex-col gap-10 items-center justify-center">
                     <img src={loginlogo} alt="logo" className='px-4'/>
                     <Formik
                         initialValues={{
@@ -67,8 +67,9 @@ const Login: FC<LoginProps> = () => {
                         <Form className='w-full flex flex-col gap-3'>
                             <InputText name='username' id='username' label='Username OR Email' />
                             <InputPassword name='password' id='password' label='Password' required={true} />
-                            <span className='self-start'>
-                                <div className='text-sm'>Not registered yet ! <Link to={'/register'} className='text-blue-500 font-medium cursor-pointer'>Click here</Link></div>
+                            <span className='flex items-center justify-between text-sm'>
+                                <div>Not registered yet ! <Link to={'/register'} className='text-blue-500 font-medium cursor-pointer'>Click here</Link></div>
+                                <span className='cursor-pointer text-blue-500'>forgot password?</span>
                             </span>
                             <button type='submit' className='font-medium text-white bg-blue-600 disabled:bg-blue-300 w-full py-1.5 rounded-md hover:bg-blue-700'>Login</button>
                         </Form>
