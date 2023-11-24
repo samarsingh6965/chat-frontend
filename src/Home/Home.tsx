@@ -25,7 +25,6 @@ const Home: FC<HomeProps> = () => {
             console.log('Connected to the WebSocket server from notification icon', socket?.id);
         });
         socket?.on('notification', (data: any) => {
-            console.log('ntfc', data)
             setNotifications(data);
             setShowNotification(true);
             setTimeout(() => {
