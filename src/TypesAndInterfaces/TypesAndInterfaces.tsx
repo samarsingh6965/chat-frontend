@@ -13,6 +13,6 @@ export interface IUsers {
     email?: string ,
     gender?:string,
     bio?:string,
-    profileImage:{_id:string,url:string,mimetype:string}|null,
+    profileImage:string|null,
     lastMessage:{_id:string,message:string,timestamp:string,seen:boolean}|null
 }

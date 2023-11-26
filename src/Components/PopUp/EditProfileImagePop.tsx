@@ -13,7 +13,7 @@ interface EditProfileImagePopProps {
 
 const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) => {
     const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]');
-    const [uploadedImage, setUploadedImage] = useState<{ _id: string, url: string, mimetype: string } | null>(userDetails?.profileImage ?? null)
+    const [uploadedImage, setUploadedImage] = useState<any | null>(userDetails?.profileImage ?? null)
     const handleChildClickPrevent = (event: MouseEvent) => {
         event.stopPropagation();
     }
@@ -22,7 +22,7 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
             const response: responseType = await http({
                 url: `/user/editPersnolDetail`,
                 method: 'put',
-                data: { _id:userDetails._id ,profileImage:uploadedImage?._id },
+                data: { _id:userDetails._id ,profileImage:uploadedImage },
             });
             if (response?.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
@@ -51,7 +51,7 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
             });
             if (response?.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
-                setUploadedImage(response?.data?.data);
+                setUploadedImage(response?.data?.data?.url);
             } else {
                 toast.error(response?.data?.message);
             }
@@ -64,25 +64,25 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
         }
     };
     const handleDeleteImage = async () => {
-        try {
-            const response: responseType = await http({
-                url: `/media/deleteMediaPermanent`,
-                method: 'delete',
-                data: { _id: uploadedImage?._id },
-            });
-            if (response?.data?.code === 'SUCCESS_200') {
-                toast.success(response?.data?.message);
-                setUploadedImage(null)
-            } else {
-                toast.error(response?.data?.message);
-            }
-        } catch (error: any) {
-            if (error.response && error.response.data && error.response.data.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                toast.error('Error Adding AssetType.');
-            }
-        }
+        // try {
+        //     const response: responseType = await http({
+        //         url: `/media/deleteMediaPermanent`,
+        //         method: 'delete',
+        //         data: { _id: uploadedImage?._id },
+        //     });
+        //     if (response?.data?.code === 'SUCCESS_200') {
+        //         toast.success(response?.data?.message);
+        //         setUploadedImage(null)
+        //     } else {
+        //         toast.error(response?.data?.message);
+        //     }
+        // } catch (error: any) {
+        //     if (error.response && error.response.data && error.response.data.message) {
+        //         toast.error(error?.response?.data?.message);
+        //     } else {
+        //         toast.error('Error Adding AssetType.');
+        //     }
+        // }
     }
     return (
         <AnimatePresence>
@@ -104,7 +104,7 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
                         {uploadedImage !== null ?
                             <div className="w-full h-96 rounded-md border relative">
                                 <span onClick={handleDeleteImage} className='w-5 h-5 flex items-center justify-center absolute cursor-pointer -top-2 -right-2 rounded-full bg-gray-200 text-gray-700 text-sm border border-black'><RxCross2 /></span>
-                                <img src={`${process.env.REACT_APP_API_URL}/${uploadedImage?.url}`} alt={uploadedImage?.mimetype} className='w-full h-full' />
+                                <img src={uploadedImage} alt={'image'} className='w-full h-full' />
                             </div>
                             :
                             <ImageUploadInput onImageUpload={handleImageUpload} />

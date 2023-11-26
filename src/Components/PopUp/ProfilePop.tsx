@@ -127,7 +127,7 @@ const ProfilePop: FC<ProfilePopProps> = ({ open, setOpen }) => {
                         className="sm:w-[450px] relative rounded-lg shadow-2xl shadow-blue-100 flex flex-col gap-3 items-center sm:mx-0 mx-6 w-full sm:min-w-[450px] h-auto px-4 py-8 bg-white"
                     >
                         <div onClick={handleImageParentClick} className="w-24 h-24 min-h-24 min-w-24 rounded-full border relative">
-                            <img ref={imageRef} onClick={(e) => handleImageClick(e)} src={userDetails.profileImage === null ? (userDetails.gender === 'male' ? maleavatar : userDetails.gender === 'female' ? femaleavatar : otheravatar) : `${process.env.REACT_APP_API_URL}/${userDetails.profileImage.url}`} alt={'profile'} className='w-full h-full rounded-full cursor-pointer' />
+                            <img ref={imageRef} onClick={(e) => handleImageClick(e)} src={userDetails.profileImage === null ? (userDetails.gender === 'male' ? maleavatar : userDetails.gender === 'female' ? femaleavatar : otheravatar) : userDetails.profileImage} alt={'profile'} className='w-full h-full rounded-full cursor-pointer' />
                             <span className='absolute top-0 left-0 w-full h-full'><ActionPop action={actions} icon='none' /></span>
                         </div>
                         <div className="w-full">
