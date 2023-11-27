@@ -4,7 +4,7 @@ import ImageUploadInput from '../FormControl/ImageUploadInput';
 import { responseType } from '../../TypesAndInterfaces/TypesAndInterfaces';
 import http from '../../Services/http/http';
 import { toast } from 'react-toastify';
-import {RxCross2} from 'react-icons/rx'
+import { RxCross2 } from 'react-icons/rx'
 
 interface EditProfileImagePopProps {
     open: boolean
@@ -13,17 +13,19 @@ interface EditProfileImagePopProps {
 
 const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) => {
     const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]');
-    const [uploadedImage, setUploadedImage] = useState<any | null>(userDetails?.profileImage ?? null)
+    const [uploadedImage, setUploadedImage] = useState<any | null>(userDetails?.profileImage ?? null);
     const handleChildClickPrevent = (event: MouseEvent) => {
         event.stopPropagation();
     }
+
     const handleUpdate = async () => {
         try {
             const response: responseType = await http({
                 url: `/user/editPersnolDetail`,
                 method: 'put',
-                data: { _id:userDetails._id ,profileImage:uploadedImage },
+                data: { _id: userDetails._id, profileImage: uploadedImage },
             });
+            
             if (response?.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
                 setUploadedImage(null)
@@ -49,6 +51,7 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
                 method: 'post',
                 data: FD
             });
+
             if (response?.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
                 setUploadedImage(response?.data?.data?.url);
@@ -63,27 +66,25 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
             }
         }
     };
+
     const handleDeleteImage = async () => {
-        // try {
-        //     const response: responseType = await http({
-        //         url: `/media/deleteMediaPermanent`,
-        //         method: 'delete',
-        //         data: { _id: uploadedImage?._id },
-        //     });
-        //     if (response?.data?.code === 'SUCCESS_200') {
-        //         toast.success(response?.data?.message);
-        //         setUploadedImage(null)
-        //     } else {
-        //         toast.error(response?.data?.message);
-        //     }
-        // } catch (error: any) {
-        //     if (error.response && error.response.data && error.response.data.message) {
-        //         toast.error(error?.response?.data?.message);
-        //     } else {
-        //         toast.error('Error Adding AssetType.');
-        //     }
-        // }
+        try {
+            const response: responseType = await http({
+                url: `/media/addMedia`,
+                method: 'delete',
+                data: { downloadUrl: uploadedImage },
+            });
+            if (response?.data?.code === 'SUCCESS_200') {
+                toast.success(response?.data?.message);
+                setUploadedImage(null)
+            } else {
+                toast.error(response?.data?.message);
+            }
+        } catch (error: any) {
+            toast.error(error?.message);
+        }
     }
+
     return (
         <AnimatePresence>
             {open && (
@@ -104,7 +105,7 @@ const EditProfileImagePop: FC<EditProfileImagePopProps> = ({ open, setOpen }) =>
                         {uploadedImage !== null ?
                             <div className="w-full h-96 rounded-md border relative">
                                 <span onClick={handleDeleteImage} className='w-5 h-5 flex items-center justify-center absolute cursor-pointer -top-2 -right-2 rounded-full bg-gray-200 text-gray-700 text-sm border border-black'><RxCross2 /></span>
-                                <img src={uploadedImage} alt={'image'} className='w-full h-full' />
+                                <img src={uploadedImage} alt='Profile' className='w-full h-full' />
                             </div>
                             :
                             <ImageUploadInput onImageUpload={handleImageUpload} />
