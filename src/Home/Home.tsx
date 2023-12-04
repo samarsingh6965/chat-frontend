@@ -10,11 +10,11 @@ interface HomeProps { }
 
 const Home: FC<HomeProps> = () => {
     const { pathname } = useLocation();
-    const { setSocket } = useContext(DataContext);
+    const { setSocket, setShowProgress, setProgress, setShowTick } = useContext(DataContext);
     const token: string | null = sessionStorage.getItem('token');
     const [notifications, setNotifications] = useState<any>({});
     const [showNotification, setShowNotification] = useState<boolean>(false);
-    
+
     useEffect(() => {
         const socket = io(`${process.env.REACT_APP_SOCKET_URL}`, {
             extraHeaders: {
@@ -31,7 +31,20 @@ const Home: FC<HomeProps> = () => {
                 setShowNotification(false);
             }, 5000);
         });
-
+        socket?.on('upload_progress', (data: number) => {
+            // console.log(data)
+            setShowProgress(true)
+            setProgress(data)
+            if (data === 100) {
+                setTimeout(() => {
+                    setShowProgress(false)
+                    setShowTick(true)
+                    setTimeout(() => {
+                        setShowTick(false)
+                    }, 2000);
+                }, 500);
+            }
+        })
         setSocket(socket);
         return () => {
             socket.off('notification')
