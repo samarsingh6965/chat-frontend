@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect } from 'react';
+import { useState, type FC, useEffect, useContext } from 'react';
 import RightHeader from './RightHeader';
 import { useParams } from 'react-router-dom';
 import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
@@ -7,12 +7,14 @@ import { toast } from 'react-toastify';
 import ChatPage from './ChatPage';
 import RightHeaderSkeleton from '../Components/Skeletons/RightHeaderSkeleton';
 import ChatPageSkeleton from '../Components/Skeletons/ChatPageSkeleton';
+import { DataContext } from '../Context/DataProvider';
 
 interface RightBarProps { }
 
 const RightBar: FC<RightBarProps> = () => {
     const { userId } = useParams();
     const [loading, setLoading] = useState<boolean>(true)
+    const { isRender } = useContext(DataContext);
     const [user, setUser] = useState<IUsers>()
     const getUserByUserId = async () => {
         try {
@@ -37,7 +39,7 @@ const RightBar: FC<RightBarProps> = () => {
             setLoading(false)
         }, 1000);
         // eslint-disable-next-line
-    }, [userId])
+    }, [userId, isRender])
     return (
         <div className="w-full h-full">
             {loading ?

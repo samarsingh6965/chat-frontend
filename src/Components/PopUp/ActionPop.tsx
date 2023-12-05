@@ -16,7 +16,7 @@ interface ActionPopProps {
 
 const ActionPop: FC<ActionPopProps> = ({ action, icon }) => {
     return (
-        <Menu as="div" className="relative inline-block text-left w-full h-full">
+        <Menu as="div" className="relative inline-block text-left w-full h-full z-50">
             <Menu.Button className={'text-2xl w-full h-full'}>
                 {icon === 'FiMoreVertical' && <FiMoreVertical />}
                 {icon === 'none' && <span className='w-full h-full'></span>}
@@ -30,8 +30,8 @@ const ActionPop: FC<ActionPopProps> = ({ action, icon }) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
+                <Menu.Items className="absolute right-0 z-50 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1 z-50">
                         {action?.length > 0 && action?.map(e => (
                             <React.Fragment key={e?.id}>
                                 <Menu.Item>

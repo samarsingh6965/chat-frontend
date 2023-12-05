@@ -10,7 +10,7 @@ interface HomeProps { }
 
 const Home: FC<HomeProps> = () => {
     const { pathname } = useLocation();
-    const { setSocket, setShowProgress, setProgress, setShowTick } = useContext(DataContext);
+    const { setSocket, setShowProgress, setProgress, setShowTick, setIsRender, isRender } = useContext(DataContext);
     const token: string | null = sessionStorage.getItem('token');
     const [notifications, setNotifications] = useState<any>({});
     const [showNotification, setShowNotification] = useState<boolean>(false);
@@ -31,6 +31,12 @@ const Home: FC<HomeProps> = () => {
                 setShowNotification(false);
             }, 5000);
         });
+        socket?.on('blocked', () => {
+            setIsRender(!isRender);
+        });
+        socket?.on('unblocked', () => {
+            setIsRender(!isRender);
+        });
         socket?.on('upload_progress', (data: number) => {
             // console.log(data)
             setShowProgress(true)
@@ -48,6 +54,9 @@ const Home: FC<HomeProps> = () => {
         setSocket(socket);
         return () => {
             socket.off('notification')
+            socket.off('blocked')
+            socket.off('unblocked')
+            socket.off('upload_progress')
         }
         // eslint-disable-next-line
     }, [])

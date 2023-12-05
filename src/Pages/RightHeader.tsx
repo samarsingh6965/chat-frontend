@@ -76,7 +76,7 @@ const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
     }, [userDetails, isRender]);
 
     return (
-        <div className="w-full h-20 bg-sky-100 flex items-center justify-between px-3 border-b">
+        <div className="w-full h-20 z-50 bg-sky-100 flex items-center justify-between px-3 border-b">
             <div className="flex items-center gap-3">
                 <span onClick={() => navigate('/home')} className='text-2xl cursor-pointer text-blue-600'><BsArrowLeft /></span>
                 <img
@@ -88,7 +88,7 @@ const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
                     <h1 className='text-sm'>{userDetails?.bio}</h1>
                 </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 z-50">
                 <ActionPop action={actions} icon='FiMoreVertical' />
             </div>
             {openProfile && <UserProfilePop open={openProfile} setOpen={setOpenProfile} userDetails={userDetails} />}

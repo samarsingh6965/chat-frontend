@@ -193,10 +193,10 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
 
     return (
         <div className={`w-full h-full flex flex-col`}>
-            <div ref={containerRef} className={`w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll`}>
+            <div ref={containerRef} className={`w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll -z-10`}>
                 {sortedGroupedMessages?.map((group: any) => (
                     <div key={group.date}>
-                        <div className='w-full py-1 flex items-center justify-center sticky top-2 z-20'>
+                        <div className='w-full py-1 flex items-center justify-center sticky top-2'>
                             <p className='text-xs bg-gray-200 px-2 py-1 rounded-md'>{moment(group.date).isSame(moment(), 'day')
                                 ? 'Today'
                                 : moment(group.date).isSame(moment().subtract(1, 'days'), 'day')
@@ -206,7 +206,7 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                         {group.messages?.sort((a: any, b: any): number => { const timeA = new Date(a.timestamp).getTime(); const timeB = new Date(b.timestamp).getTime(); return timeA - timeB; })?.map((message: any, index: number) => (
                             <React.Fragment key={index}>
                                 {
-                                    <div className={`flex gap-1 items-center ${message.from === loggedInUser?._id ? 'justify-end' : 'justify-start'} my-2 text-sm`}>
+                                    <div className={`flex gap-1 z-10 items-center ${message.from === loggedInUser?._id ? 'justify-end' : 'justify-start'} my-2 text-sm`}>
                                         <div className={`flex gap-4 ${message.from !== loggedInUser?._id && 'flex-row-reverse'}`}>
                                             <p className={`py-1.5 flex gap-3 rounded-b-md px-2 drop-shadow-2xl relative ${message.from === loggedInUser?._id ? 'bg-green-100 rounded-tl-md' : 'bg-white rounded-tr-md'}`}>
                                                 {message.message}
@@ -228,18 +228,25 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                     : null
                 }
             </div>
-            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] z-50 right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
+            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
             <div className='w-full h-[6%] flex items-center justify-center gap-2'>
-                <input
-                    ref={inputRef}
-                    // onFocus={() => setInputActive(true)}
-                    // onBlur={() => setInputActive(false)}
-                    onChange={(e) => handleTyping(e)}
-                    onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
-                    type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-[90%] bg-white text-gray-500' />
-                <div className='bg-blue-400 w-10 h-10 rounded-full flex justify-center items-center'>
-                    <button type='submit' onClick={handleSend}><IoMdSend className='text-lg text-white' /></button>
-                </div>
+                {userDetails?.block_list?.includes(loggedInUser?._id) ?
+                    <span className="flex items-center justify-center">
+                        You can no longer reply to this chat.
+                    </span>
+                    :
+                    <>
+                        <input
+                            ref={inputRef}
+                            // onFocus={() => setInputActive(true)}
+                            // onBlur={() => setInputActive(false)}
+                            onChange={(e) => handleTyping(e)}
+                            onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
+                            type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-[90%] bg-white text-gray-500' />
+                        <div className='bg-blue-400 w-10 h-10 rounded-full flex justify-center items-center'>
+                            <button type='submit' onClick={handleSend}><IoMdSend className='text-lg text-white' /></button>
+                        </div>
+                    </>}
             </div>
         </div>
     )
