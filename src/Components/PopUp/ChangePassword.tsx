@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { BsArrowLeft } from 'react-icons/bs';
 import SubmitButton from '../FormControl/SubmitButton';
 import InputPassword from '../FormControl/InputPassword';
+import { useNavigate } from 'react-router-dom';
 
 interface ChangePasswordProps {
     open: boolean
@@ -16,6 +17,7 @@ interface ChangePasswordProps {
 
 const ChangePassword: FC<ChangePasswordProps> = ({ open, setOpen }) => {
     const userDetails = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]');
+    const navigate = useNavigate()
     const handleChildClickPrevent = (event: MouseEvent) => {
         event.stopPropagation();
     }
@@ -43,7 +45,14 @@ const ChangePassword: FC<ChangePasswordProps> = ({ open, setOpen }) => {
             });
             if (response.data?.code === 'SUCCESS_200') {
                 toast.success(response?.data?.message);
-                // sessionStorage.setItem('userDetails', JSON.stringify(response.data.data));
+                setTimeout(() => {
+                    setOpen(false)
+                    toast.warn('For security purpose, You wil be logged out in 3 seconds.');
+                }, 1000);
+                setTimeout(() => {
+                    sessionStorage.clear();
+                    navigate('/')
+                }, 4000);
             } else {
                 toast.error(response?.data?.message)
             }
@@ -82,7 +91,7 @@ const ChangePassword: FC<ChangePasswordProps> = ({ open, setOpen }) => {
                                     <InputPassword name='old_password' label='Old password' id='old_password' />
                                     <InputPassword name='new_password' label='New password' id='new_password' />
                                     <InputPassword name='cnf_password' label='Confirm new password' id='cnf_password' />
-                                    <SubmitButton label='Update password'/>
+                                    <SubmitButton label='Update password' />
                                 </Form>
                             </Formik>
                         </div>

@@ -1,30 +1,79 @@
-import { useState, type FC } from 'react';
+import { useState, type FC, useEffect, useContext } from 'react';
 import maleavatar from '../Assets/maleavatar.jpg'
 import femaleavatar from '../Assets/femaleavatar.jpg'
 import otheravatar from '../Assets/otheravatar.jpg'
 import ActionPop from '../Components/PopUp/ActionPop';
 import { useNavigate } from 'react-router-dom';
-import { IUsers } from '../TypesAndInterfaces/TypesAndInterfaces';
+import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import { BsArrowLeft } from 'react-icons/bs';
 import UserProfilePop from '../Components/PopUp/UserProfilePop';
+import http from '../Services/http/http';
+import { toast } from 'react-toastify';
+import { DataContext } from '../Context/DataProvider';
 
 interface RightHeaderProps {
     userDetails: IUsers | undefined
 }
 
 const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
-    const [openProfile,setOpenProfile] = useState<boolean>(false)
+    const [openProfile, setOpenProfile] = useState<boolean>(false);
+    const [actions, setActions] = useState<any[]>([])
+    const loggedInUser = JSON.parse(sessionStorage.getItem('userDetails') ?? '[]');
+    const { isRender, setIsRender } = useContext(DataContext)
     const navigate = useNavigate();
-    const handleBlock = () => {
-        window.alert('Clicked On Block.')
+    const handleBlock = async () => {
+        try {
+            const response: responseType = await http({
+                url: '/user/addToBlockList',
+                method: 'put',
+                data: { _id: loggedInUser?._id, userId: userDetails?._id }
+            });
+            if (response.data?.code === 'SUCCESS_200') {
+                toast.success(response?.data?.message);
+                setIsRender(!isRender)
+                sessionStorage.setItem('userDetails', JSON.stringify(response.data.data));
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: any) {
+            toast.error((error as any)?.response?.data?.message)
+        }
+    }
+    const handleUnBlock = async () => {
+        try {
+            const response: responseType = await http({
+                url: '/user/removeFromBlockList',
+                method: 'put',
+                data: { _id: loggedInUser?._id, userId: userDetails?._id }
+            });
+            if (response.data?.code === 'SUCCESS_200') {
+                toast.success(response?.data?.message);
+                setIsRender(!isRender)
+                sessionStorage.setItem('userDetails', JSON.stringify(response.data.data))
+            } else {
+                toast.error(response?.data?.message)
+            }
+        } catch (error: any) {
+            toast.error((error as any)?.response?.data?.message)
+        }
     }
     const handleProfile = () => {
         setOpenProfile(true);
     }
-    const actios = [
-        { id: 1, name: 'View Profile', click: handleProfile },
-        { id: 2, name: 'Block', click: handleBlock },
-    ]
+    useEffect(() => {
+        if (loggedInUser?.block_list?.includes(userDetails?._id)) {
+            setActions([
+                { id: 1, name: 'View Profile', click: handleProfile },
+                { id: 2, name: 'Unblock', click: handleUnBlock }
+            ])
+        } else {
+            setActions([
+                { id: 1, name: 'View Profile', click: handleProfile },
+                { id: 2, name: 'Block', click: handleBlock }
+            ])
+        }
+        // eslint-disable-next-line 
+    }, [userDetails, isRender]);
 
     return (
         <div className="w-full h-20 bg-sky-100 flex items-center justify-between px-3 border-b">
@@ -40,9 +89,9 @@ const RightHeader: FC<RightHeaderProps> = ({ userDetails }) => {
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <ActionPop action={actios} icon='FiMoreVertical' />
+                <ActionPop action={actions} icon='FiMoreVertical' />
             </div>
-            {openProfile && <UserProfilePop open={openProfile} setOpen={setOpenProfile} userDetails={userDetails}/>}
+            {openProfile && <UserProfilePop open={openProfile} setOpen={setOpenProfile} userDetails={userDetails} />}
         </div>
     );
 }

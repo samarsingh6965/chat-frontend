@@ -6,13 +6,14 @@ export type responseType = {
     }
 };
 
-export interface IUsers { 
+export interface IUsers {
     _id: string,
-    name:string, 
-    username?: string, 
-    email?: string ,
-    gender?:string,
-    bio?:string,
-    profileImage:string|null,
-    lastMessage:{_id:string,message:string,timestamp:string,seen:boolean}|null
+    name: string,
+    username?: string,
+    email?: string,
+    gender?: string,
+    bio?: string,
+    profileImage: string | null,
+    block_list: string[],
+    lastMessage: { _id: string, message: string, timestamp: string, seen: boolean } | null
 }

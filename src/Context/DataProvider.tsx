@@ -10,6 +10,8 @@ type DataContextValue = {
   setProgress: React.Dispatch<React.SetStateAction<number>>
   showTick: boolean
   setShowTick: React.Dispatch<React.SetStateAction<boolean>>
+  isRender: boolean
+  setIsRender: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const DataContext = createContext<DataContextValue>({} as DataContextValue);
@@ -21,12 +23,14 @@ const DataProvider = ({ children }: DataProviderProps) => {
   const [socket, setSocket] = useState<Socket>();
   const [progress, setProgress] = useState<number>(0);
   const [showProgress, setShowProgress] = useState<boolean>(false);
-  const [showTick, setShowTick] = useState<boolean>(false)
+  const [showTick, setShowTick] = useState<boolean>(false);
+  const [isRender, setIsRender] = useState<boolean>(false);
   const value: DataContextValue = {
     socket, setSocket,
     progress, setProgress,
     showProgress, setShowProgress,
-    showTick, setShowTick
+    showTick, setShowTick,
+    isRender, setIsRender
   };
   return (
     <DataContext.Provider value={value}>
