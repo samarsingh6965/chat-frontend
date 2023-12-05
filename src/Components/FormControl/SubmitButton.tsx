@@ -15,7 +15,7 @@ const SubmitButton = forwardRef<HTMLButtonElement, SubmitButtonProps>(
             <button
                 type='submit'
                 ref={buttonRef}
-                className='bg-secondary py-1.5 text-white px-4 rounded text-sm transition-all duration-300 hover:text-secondary hover:bg-white hover:border-secondary border'
+                className='py-1.5 text-white px-4 rounded text-sm transition-all duration-300 hover:text-secondary bg-blue-500 hover:bg-blue-600 hover:border-secondary border'
             >
                 {label ? label : 'SUBMIT'}
             </button>
