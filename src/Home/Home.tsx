@@ -16,7 +16,7 @@ const Home: FC<HomeProps> = () => {
     const [showNotification, setShowNotification] = useState<boolean>(false);
 
     useEffect(() => {
-        const socket = io(`${process.env.REACT_APP_SOCKET_URL}`, {
+        const socket = io(`${process.env.REACT_APP_API_URL}`, {
             extraHeaders: {
                 token: token || ''
             }
@@ -74,7 +74,6 @@ const Home: FC<HomeProps> = () => {
             },
         },
     };
-
 
     return (
         <div className="w-screen h-screen">
