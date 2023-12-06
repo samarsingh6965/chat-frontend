@@ -230,7 +230,8 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
             </div>
             <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
             <div className='w-full h-[6%] flex items-center justify-center gap-2'>
-                {userDetails?.block_list?.includes(loggedInUser?._id) ?
+                {(userDetails?.block_list?.includes(loggedInUser?._id) || loggedInUser?.block_list?.includes(userDetails?._id))
+                    ?
                     <span className="flex items-center justify-center">
                         You can no longer reply to this chat.
                     </span>
