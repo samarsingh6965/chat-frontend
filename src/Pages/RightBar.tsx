@@ -41,7 +41,7 @@ const RightBar: FC<RightBarProps> = () => {
         // eslint-disable-next-line
     }, [userId, isRender])
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full relative">
             {loading ?
                 <div className={`h-full w-full z-50 fixed`}>
                     <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
@@ -53,10 +53,10 @@ const RightBar: FC<RightBarProps> = () => {
                 </div>
                 :
                 <>
-                    <div className="w-full sm:h-[80px] h-auto fixed inset-x-0 sm:sticky top-2">
+                    <div className={`fixed inset-x-0 sm:sticky top-0 w-full sm:h-[80px] h-auto z-50`}>
                         <RightHeader userDetails={user} />
                     </div>
-                    <div className="w-full h-full pt-[85px] sm:pt-0 sm:h-[91%]">
+                    <div className={`w-full h-full pt-[80px] sm:pt-0 sm:h-[91%]`}>
                         <ChatPage userDetails={user} />
                     </div>
                 </>

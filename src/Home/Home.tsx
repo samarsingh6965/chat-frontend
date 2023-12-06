@@ -92,7 +92,7 @@ const Home: FC<HomeProps> = () => {
                     </p>
                 </motion.div>
             }
-            <div className={`w-full h-full p-2 relative flex gap-2`}>
+            <div className={`w-full h-full relative flex`}>
                 <div className={`${pathname !== '/home' && 'hidden sm:block'} sm:w-[450px] w-full min-w-full sm:min-w-[450px] h-full border`}>
                     <LeftBar />
                 </div>

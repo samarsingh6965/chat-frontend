@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useRef, useState } from 'react'
 import { IoMdSend } from 'react-icons/io';
 import { GoDotFill } from 'react-icons/go';
 import { toast } from 'react-toastify';
-import { BsChevronDoubleDown } from 'react-icons/bs';
+// import { BsChevronDoubleDown } from 'react-icons/bs';
 import { IUsers, responseType } from '../TypesAndInterfaces/TypesAndInterfaces';
 import moment from 'moment';
 import { DataContext } from '../Context/DataProvider';
@@ -25,8 +25,6 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     const [messagesJSON, setMessagesJSON] = useState<MesssageMeta>({ from: loggedInUser?._id, to: userDetails?._id });
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
-    // const [isInputActive, setInputActive] = useState(false);
-    // console.log(isInputActive)
 
     const fetchMessages = async () => {
         try {
@@ -192,8 +190,8 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
     }, [messages]);
 
     return (
-        <div className={`w-full h-full flex flex-col`}>
-            <div ref={containerRef} className={`w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll -z-10`}>
+        <div className={`w-full h-full flex flex-col -z-10`}>
+            <div ref={containerRef} className={`w-full h-[94%] bg-gray-100 px-4 overflow-y-scroll`}>
                 {sortedGroupedMessages?.map((group: any) => (
                     <div key={group.date}>
                         <div className='w-full py-1 flex items-center justify-center sticky top-2'>
@@ -228,19 +226,17 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
                     : null
                 }
             </div>
-            <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' />
-            <div className='w-full h-[6%] flex items-center justify-center gap-2'>
+            {/* <BsChevronDoubleDown onClick={scrollToBottom} className='fixed bottom-[8%] right-6 cursor-pointer w-8 h-8 bg-gray-600 text-white rounded-full p-1.5 bg-opacity-70' /> */}
+            <div className='w-full h-[6%] px-3 flex items-center justify-center gap-2'>
                 {(userDetails?.block_list?.includes(loggedInUser?._id) || loggedInUser?.block_list?.includes(userDetails?._id))
                     ?
                     <span className="flex items-center justify-center">
-                        You can no longer reply to this chat.
+                        You can no longer reply to this conversation.
                     </span>
                     :
                     <>
                         <input
                             ref={inputRef}
-                            // onFocus={() => setInputActive(true)}
-                            // onBlur={() => setInputActive(false)}
                             onChange={(e) => handleTyping(e)}
                             onKeyDown={e => { if (e.key === 'Enter') { sendMessage(); e.currentTarget.value = ''; } }}
                             type="text" placeholder='Message' className='border-2 rounded-full outline-none px-3 py-1.5 w-[90%] bg-white text-gray-500' />
