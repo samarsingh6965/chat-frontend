@@ -57,6 +57,7 @@ const Home: FC<HomeProps> = () => {
             socket.off('blocked')
             socket.off('unblocked')
             socket.off('upload_progress')
+            socket.off('connect')
         }
         // eslint-disable-next-line
     }, [])
