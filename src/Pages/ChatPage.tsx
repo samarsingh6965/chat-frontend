@@ -110,6 +110,10 @@ const ChatPage: FC<ChatPageProps> = ({ userDetails }) => {
 
         return () => {
             socket?.off('message');
+            socket?.off('activeChat');
+            socket?.off('stop_typing');
+            socket?.off('typing');
+            socket?.off('connect');
         };
         // eslint-disable-next-line
     }, []);
